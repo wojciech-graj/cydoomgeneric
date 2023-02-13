@@ -14,9 +14,10 @@
 
 from enum import IntEnum
 import time
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, Sequence
 
 
+from cpython.mem cimport PyMem_Malloc
 cimport cydoomgeneric as cdg
 import numpy as np
 cimport numpy as np
@@ -116,13 +117,24 @@ def init(resx: int,
         &__set_window_title)
 
 
-def main() -> int:
+def main(argv: Optional[Sequence[str]]=None) -> int:
     """
-    main() -> int
+    main(argv) -> int
 
     Run doom. Must be called after init.
+
+    :param Optional[Sequence[str]] argv:
     """
-    return cdg.dg_main(0, NULL)
+    if argv is None:
+        return cdg.dg_main(0, NULL)
+
+    bytestrings = []
+    cdef char **cargv = <char**>PyMem_Malloc(sizeof(char *) * len(argv))
+    for i, a in enumerate(argv):
+        bs = bytes(a, "utf-8")
+        bytestrings.append(bs)
+        cargv[i] = bs
+    cdg.dg_main(len(argv), cargv)
 
 
 class Keys(IntEnum):

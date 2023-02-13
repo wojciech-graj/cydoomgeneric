@@ -36,7 +36,7 @@ cdg.init(resx,
     sleep_ms=sleep_ms,
     get_ticks_ms=get_ticks_ms,
     set_window_title=set_window_title)
-cdg.main()
+cdg.main()  # Optional parameter argv=[...]
 ```
 
 All possible input keys for `get_key` are either members of the `Keys` enum, or the ascii value of the uppercase character `ord(c.upper())`.
@@ -78,4 +78,3 @@ $ python demo.py
 - Windows build
 - Fix segfault when closing game
 - Implement sound
-- Allow argv to be passed to main

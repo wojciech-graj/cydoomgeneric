@@ -82,10 +82,8 @@ if __name__ == "__main__":
     g = PyPlotDoom()
     cdg.init(640,
         400,
-        g.init,
         g.draw_frame,
-        None,
-        None,
         g.get_key,
-        g.set_window_title)
+        init=g.init,
+        set_window_title=g.set_window_title)
     cdg.main()

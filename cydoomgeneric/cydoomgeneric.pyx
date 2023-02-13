@@ -69,12 +69,12 @@ cdef void __set_window_title(const char *title):
 
 def init(resx: int,
     resy: int,
-    init: Optional[Callable[None, None]],
     draw_frame: Callable[[np.ndarray], None],
-    sleep_ms: Optional[Callable[[int], None]],
-    get_ticks_ms: Optional[Callable[None, int]],
     get_key: Callable[[int], str],
-    set_window_title: Optional[Callable[[str], None]]
+    init: Optional[Callable[None, None]]=None,
+    sleep_ms: Optional[Callable[[int], None]]=None,
+    get_ticks_ms: Optional[Callable[None, int]]=None,
+    set_window_title: Optional[Callable[[str], None]]=None
     ) -> None:
     """
     init(resx, resx, init, draw_frame, sleep_ms, get_ticks_ms, get_key, set_window_title) -> None
@@ -83,11 +83,11 @@ def init(resx: int,
 
     :param int resx:
     :param int resy:
-    :param Optional[Callable[None, None]] init: Initialization function called immediately after this function terminates
     :param Callable[[np.ndarray], None] draw_frame: Called every frame. Takes framebuffer as np.ndarray in shape [resy, resx, 4]. Pixels are BGR.
+    :param Callable[[int], Optional[Tuple[int, int]]] get_key: Called multiple times every frame until input is exhausted. Return None when input is exhausted. Otherwise, return (is pressed ~0/1~, key).
+    :param Optional[Callable[None, None]] init: Initialization function called immediately after this function terminates
     :param Optional[Callable[[int], None]] sleep_ms:
     :param Optional[Callable[None, int]] get_ticks_ms:
-    :param Callable[[int], Optional[Tuple[int, int]]] get_key: Called multiple times every frame until input is exhausted. Return None when input is exhausted. Otherwise, return (is pressed ~0/1~, key).
     :param Optional[Callable[[str], None]] set_window_title:
     """
     global __init_f

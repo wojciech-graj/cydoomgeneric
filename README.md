@@ -30,12 +30,12 @@ def get_ticks_ms() -> int:
 
 cdg.init(resx,
     resy,
-    init,  # or None
     draw_frame,
-    sleep_ms,  # or None
-    get_ticks_ms,  # or None
     get_key,
-    set_window_title) # or None
+    init=init,
+    sleep_ms=sleep_ms,
+    get_ticks_ms=get_ticks_ms,
+    set_window_title=set_window_title)
 cdg.main()
 ```
 
@@ -78,3 +78,4 @@ $ python demo.py
 - Windows build
 - Fix segfault when closing game
 - Implement sound
+- Allow argv to be passed to main

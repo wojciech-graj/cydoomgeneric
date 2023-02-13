@@ -2812,7 +2812,7 @@ static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_update;
-static PyObject *__pyx_pf_13cydoomgeneric_init(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_resx, PyObject *__pyx_v_resy, PyObject *__pyx_v_init, PyObject *__pyx_v_draw_frame, PyObject *__pyx_v_sleep_ms, PyObject *__pyx_v_get_ticks_ms, PyObject *__pyx_v_get_key, PyObject *__pyx_v_set_window_title); /* proto */
+static PyObject *__pyx_pf_13cydoomgeneric_init(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_resx, PyObject *__pyx_v_resy, PyObject *__pyx_v_draw_frame, PyObject *__pyx_v_get_key, PyObject *__pyx_v_init, PyObject *__pyx_v_sleep_ms, PyObject *__pyx_v_get_ticks_ms, PyObject *__pyx_v_set_window_title); /* proto */
 static PyObject *__pyx_pf_13cydoomgeneric_2main(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
@@ -3623,21 +3623,21 @@ static void __pyx_f_13cydoomgeneric___set_window_title(char const *__pyx_v_title
  * 
  * def init(resx: int,             # <<<<<<<<<<<<<<
  *     resy: int,
- *     init: Optional[Callable[None, None]],
+ *     draw_frame: Callable[[np.ndarray], None],
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_13cydoomgeneric_1init(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_13cydoomgeneric_init[] = "\n    init(resx, resx, init, draw_frame, sleep_ms, get_ticks_ms, get_key, set_window_title) -> None\n\n    Initializes the doom context.\n\n    :param int resx:\n    :param int resy:\n    :param Optional[Callable[None, None]] init: Initialization function called immediately after this function terminates\n    :param Callable[[np.ndarray], None] draw_frame: Called every frame. Takes framebuffer as np.ndarray in shape [resy, resx, 4]. Pixels are BGR.\n    :param Optional[Callable[[int], None]] sleep_ms:\n    :param Optional[Callable[None, int]] get_ticks_ms:\n    :param Callable[[int], Optional[Tuple[int, int]]] get_key: Called multiple times every frame until input is exhausted. Return None when input is exhausted. Otherwise, return (is pressed ~0/1~, key).\n    :param Optional[Callable[[str], None]] set_window_title:\n    ";
+static char __pyx_doc_13cydoomgeneric_init[] = "\n    init(resx, resx, init, draw_frame, sleep_ms, get_ticks_ms, get_key, set_window_title) -> None\n\n    Initializes the doom context.\n\n    :param int resx:\n    :param int resy:\n    :param Callable[[np.ndarray], None] draw_frame: Called every frame. Takes framebuffer as np.ndarray in shape [resy, resx, 4]. Pixels are BGR.\n    :param Callable[[int], Optional[Tuple[int, int]]] get_key: Called multiple times every frame until input is exhausted. Return None when input is exhausted. Otherwise, return (is pressed ~0/1~, key).\n    :param Optional[Callable[None, None]] init: Initialization function called immediately after this function terminates\n    :param Optional[Callable[[int], None]] sleep_ms:\n    :param Optional[Callable[None, int]] get_ticks_ms:\n    :param Optional[Callable[[str], None]] set_window_title:\n    ";
 static PyMethodDef __pyx_mdef_13cydoomgeneric_1init = {"init", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cydoomgeneric_1init, METH_VARARGS|METH_KEYWORDS, __pyx_doc_13cydoomgeneric_init};
 static PyObject *__pyx_pw_13cydoomgeneric_1init(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_resx = 0;
   PyObject *__pyx_v_resy = 0;
-  PyObject *__pyx_v_init = 0;
   PyObject *__pyx_v_draw_frame = 0;
+  PyObject *__pyx_v_get_key = 0;
+  PyObject *__pyx_v_init = 0;
   PyObject *__pyx_v_sleep_ms = 0;
   PyObject *__pyx_v_get_ticks_ms = 0;
-  PyObject *__pyx_v_get_key = 0;
   PyObject *__pyx_v_set_window_title = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -3646,8 +3646,44 @@ static PyObject *__pyx_pw_13cydoomgeneric_1init(PyObject *__pyx_self, PyObject *
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("init (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_resx,&__pyx_n_s_resy,&__pyx_n_s_init,&__pyx_n_s_draw_frame,&__pyx_n_s_sleep_ms,&__pyx_n_s_get_ticks_ms,&__pyx_n_s_get_key,&__pyx_n_s_set_window_title,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_resx,&__pyx_n_s_resy,&__pyx_n_s_draw_frame,&__pyx_n_s_get_key,&__pyx_n_s_init,&__pyx_n_s_sleep_ms,&__pyx_n_s_get_ticks_ms,&__pyx_n_s_set_window_title,0};
     PyObject* values[8] = {0,0,0,0,0,0,0,0};
+
+    /* "cydoomgeneric.pyx":74
+ *     draw_frame: Callable[[np.ndarray], None],
+ *     get_key: Callable[[int], str],
+ *     init: Optional[Callable[None, None]]=None,             # <<<<<<<<<<<<<<
+ *     sleep_ms: Optional[Callable[[int], None]]=None,
+ *     get_ticks_ms: Optional[Callable[None, int]]=None,
+ */
+    values[4] = ((PyObject *)Py_None);
+
+    /* "cydoomgeneric.pyx":75
+ *     get_key: Callable[[int], str],
+ *     init: Optional[Callable[None, None]]=None,
+ *     sleep_ms: Optional[Callable[[int], None]]=None,             # <<<<<<<<<<<<<<
+ *     get_ticks_ms: Optional[Callable[None, int]]=None,
+ *     set_window_title: Optional[Callable[[str], None]]=None
+ */
+    values[5] = ((PyObject *)Py_None);
+
+    /* "cydoomgeneric.pyx":76
+ *     init: Optional[Callable[None, None]]=None,
+ *     sleep_ms: Optional[Callable[[int], None]]=None,
+ *     get_ticks_ms: Optional[Callable[None, int]]=None,             # <<<<<<<<<<<<<<
+ *     set_window_title: Optional[Callable[[str], None]]=None
+ *     ) -> None:
+ */
+    values[6] = ((PyObject *)Py_None);
+
+    /* "cydoomgeneric.pyx":77
+ *     sleep_ms: Optional[Callable[[int], None]]=None,
+ *     get_ticks_ms: Optional[Callable[None, int]]=None,
+ *     set_window_title: Optional[Callable[[str], None]]=None             # <<<<<<<<<<<<<<
+ *     ) -> None:
+ *     """
+ */
+    values[7] = ((PyObject *)Py_None);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -3680,85 +3716,99 @@ static PyObject *__pyx_pw_13cydoomgeneric_1init(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_resy)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 1); __PYX_ERR(0, 70, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("init", 0, 4, 8, 1); __PYX_ERR(0, 70, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_init)) != 0)) kw_args--;
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_draw_frame)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 2); __PYX_ERR(0, 70, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("init", 0, 4, 8, 2); __PYX_ERR(0, 70, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
-        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_draw_frame)) != 0)) kw_args--;
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_get_key)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 3); __PYX_ERR(0, 70, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("init", 0, 4, 8, 3); __PYX_ERR(0, 70, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
-        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sleep_ms)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 4); __PYX_ERR(0, 70, __pyx_L3_error)
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_init);
+          if (value) { values[4] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  5:
-        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_get_ticks_ms)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 5); __PYX_ERR(0, 70, __pyx_L3_error)
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sleep_ms);
+          if (value) { values[5] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  6:
-        if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_get_key)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 6); __PYX_ERR(0, 70, __pyx_L3_error)
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_get_ticks_ms);
+          if (value) { values[6] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  7:
-        if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_set_window_title)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, 7); __PYX_ERR(0, 70, __pyx_L3_error)
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_set_window_title);
+          if (value) { values[7] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "init") < 0)) __PYX_ERR(0, 70, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
-      goto __pyx_L5_argtuple_error;
     } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
-      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
-      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
-      values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
-      values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        CYTHON_FALLTHROUGH;
+        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        CYTHON_FALLTHROUGH;
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
     }
     __pyx_v_resx = values[0];
     __pyx_v_resy = values[1];
-    __pyx_v_init = values[2];
-    __pyx_v_draw_frame = values[3];
-    __pyx_v_sleep_ms = values[4];
-    __pyx_v_get_ticks_ms = values[5];
-    __pyx_v_get_key = values[6];
+    __pyx_v_draw_frame = values[2];
+    __pyx_v_get_key = values[3];
+    __pyx_v_init = values[4];
+    __pyx_v_sleep_ms = values[5];
+    __pyx_v_get_ticks_ms = values[6];
     __pyx_v_set_window_title = values[7];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("init", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 70, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("init", 0, 4, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 70, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cydoomgeneric.init", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_13cydoomgeneric_init(__pyx_self, __pyx_v_resx, __pyx_v_resy, __pyx_v_init, __pyx_v_draw_frame, __pyx_v_sleep_ms, __pyx_v_get_ticks_ms, __pyx_v_get_key, __pyx_v_set_window_title);
+  __pyx_r = __pyx_pf_13cydoomgeneric_init(__pyx_self, __pyx_v_resx, __pyx_v_resy, __pyx_v_draw_frame, __pyx_v_get_key, __pyx_v_init, __pyx_v_sleep_ms, __pyx_v_get_ticks_ms, __pyx_v_set_window_title);
+
+  /* "cydoomgeneric.pyx":70
+ * 
+ * 
+ * def init(resx: int,             # <<<<<<<<<<<<<<
+ *     resy: int,
+ *     draw_frame: Callable[[np.ndarray], None],
+ */
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cydoomgeneric_init(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_resx, PyObject *__pyx_v_resy, PyObject *__pyx_v_init, PyObject *__pyx_v_draw_frame, PyObject *__pyx_v_sleep_ms, PyObject *__pyx_v_get_ticks_ms, PyObject *__pyx_v_get_key, PyObject *__pyx_v_set_window_title) {
+static PyObject *__pyx_pf_13cydoomgeneric_init(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_resx, PyObject *__pyx_v_resy, PyObject *__pyx_v_draw_frame, PyObject *__pyx_v_get_key, PyObject *__pyx_v_init, PyObject *__pyx_v_sleep_ms, PyObject *__pyx_v_get_ticks_ms, PyObject *__pyx_v_set_window_title) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3887,7 +3937,7 @@ static PyObject *__pyx_pf_13cydoomgeneric_init(CYTHON_UNUSED PyObject *__pyx_sel
  * 
  * def init(resx: int,             # <<<<<<<<<<<<<<
  *     resy: int,
- *     init: Optional[Callable[None, None]],
+ *     draw_frame: Callable[[np.ndarray], None],
  */
 
   /* function exit code */
@@ -19589,9 +19639,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def init(resx: int,             # <<<<<<<<<<<<<<
  *     resy: int,
- *     init: Optional[Callable[None, None]],
+ *     draw_frame: Callable[[np.ndarray], None],
  */
-  __pyx_tuple__27 = PyTuple_Pack(8, __pyx_n_s_resx, __pyx_n_s_resy, __pyx_n_s_init, __pyx_n_s_draw_frame, __pyx_n_s_sleep_ms, __pyx_n_s_get_ticks_ms, __pyx_n_s_get_key, __pyx_n_s_set_window_title); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(8, __pyx_n_s_resx, __pyx_n_s_resy, __pyx_n_s_draw_frame, __pyx_n_s_get_key, __pyx_n_s_init, __pyx_n_s_sleep_ms, __pyx_n_s_get_ticks_ms, __pyx_n_s_set_window_title); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__27);
   __Pyx_GIVEREF(__pyx_tuple__27);
   __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(8, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cydoomgeneric_pyx, __pyx_n_s_init, 70, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 70, __pyx_L1_error)
@@ -20157,7 +20207,7 @@ if (!__Pyx_RefNanny) {
  * 
  * def init(resx: int,             # <<<<<<<<<<<<<<
  *     resy: int,
- *     init: Optional[Callable[None, None]],
+ *     draw_frame: Callable[[np.ndarray], None],
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13cydoomgeneric_1init, NULL, __pyx_n_s_cydoomgeneric); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);

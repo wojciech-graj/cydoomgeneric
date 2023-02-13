@@ -1,40 +1,80 @@
-# doomgeneric
-The purpose of doomgeneric is to make porting Doom easier.
-Of course Doom is already portable but with doomgeneric it is possible with just a few functions.
+# cyDoomGeneric
 
-To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available (doom1.wad).
+Write doom ports in python!
 
-# porting
-Create a file named doomgeneric_yourplatform.c and just implement these functions to suit your platform.
-* DG_Init
-* DG_DrawFrame
-* DG_SleepMs
-* DG_GetTicksMs
-* DG_GetKey
+Python bindings for [doomgeneric](https://github.com/ozkl/doomgeneric) with ease-of-use at heart.
 
-|Functions            |Description|
-|---------------------|-----------|
-|DG_Init              |Initialize your platfrom (create window, framebuffer, etc...).
-|DG_DrawFrame         |Frame is ready in DG_ScreenBuffer. Copy it to your platform's screen.
-|DG_SleepMs           |Sleep in milliseconds.
-|DG_GetTicksMs        |The ticks passed since launch in milliseconds.
-|DG_GetKey            |Provide keyboard events.
-|DG_SetWindowTitle    |Not required. This is for setting the window title as Doom sets this from WAD file.
+To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available.
 
-# sound
-Sound is much harder to implement! If you need sound, take a look at SDL port. It fully supports sound and music! Where to start? Define FEATURE_SOUND, assign DG_sound_module and DG_music_module.
+NOTE: This project is in early development and a lot of improvements will be made over the coming weeks. The entire build system is super janky, so that'll be a top priority. See the TODO section for some potential problems.
 
-# platforms
-Ported platforms include Windows, X11, SDL, Soso. Just look at (doomgeneric_win.c or doomgeneric_xlib.c).
+## Porting
 
-## Windows
-![Windows](screenshots/windows.png)
+You must implement the `draw_frame` and `get_key` functions.
 
-## X11 - Ubuntu
-![Ubuntu](screenshots/ubuntu.png)
+```
+import cydoomgeneric as cdg
 
-## X11 - FreeBSD
-![FreeBSD](screenshots/freebsd.png)
+resx = 640
+resy = 400
 
-## SDL
-![SDL](screenshots/sdl.png)
+# Required functions
+def draw_frame(pixels: np.ndarray) -> None:
+def get_key() -> Optional[Tuple[int, int]]:
+
+# Optional functions
+def init() -> None:
+def sleep_ms(ms: int) -> None:
+def set_window_title(t: str) -> None:
+def get_ticks_ms() -> int:
+
+cdg.init(resx,
+    resy,
+    init,  # or None
+    draw_frame,
+    sleep_ms,  # or None
+    get_ticks_ms,  # or None
+    get_key,
+    set_window_title) # or None
+cdg.main()
+```
+
+All possible input keys for `get_key` are either members of the `Keys` enum, or the ascii value of the uppercase character `ord(c.upper())`.
+
+Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
+
+## Building
+
+Currently the project only runs on Linux (and potentially osx).
+
+You will need a C compiler (default: gcc) and GNU Make.
+
+The following python packages are required: `numpy cython`. To run the demo, `matplotlib` is also required.
+
+Currently, all python code must be run from the `cydoomgeneric` directory.
+
+```
+$ cd doomgeneric
+$ make
+$ cd ../cydoomgeneric
+$ python setup.py build_ext --inplace
+```
+
+Then to run the demo:
+
+```
+$ cd cydoomgeneric
+$ python demo.py
+```
+
+## Pyplot Demo Screenshots
+
+![0](screenshots/pyplotdoom_0.png)
+
+![1](screenshots/pyplotdoom_1.png)
+
+## TODO
+
+- Windows build
+- Fix segfault when closing game
+- Implement sound

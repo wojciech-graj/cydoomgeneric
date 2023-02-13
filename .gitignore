@@ -6,3 +6,4 @@ build/
 .savegame/
 *.WAD
 *.so.map
+./cydoomgeneric/cydoomgeneric.c

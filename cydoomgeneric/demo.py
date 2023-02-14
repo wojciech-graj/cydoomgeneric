@@ -72,7 +72,7 @@ class PyPlotDoom:
             return (pressed, keymap[key])
         elif len(key) == 1:
             return (pressed, ord(key.lower()))
-        return (0, 0)
+        return self.get_key()
 
 
     def set_window_title(self, t: str) -> None:
@@ -87,4 +87,7 @@ if __name__ == "__main__":
         g.get_key,
         init=g.init,
         set_window_title=g.set_window_title)
-    cdg.main()
+    try:
+        cdg.main()
+    except KeyboardInterrupt:
+        sys.exit()

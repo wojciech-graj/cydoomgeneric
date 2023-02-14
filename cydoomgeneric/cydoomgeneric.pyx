@@ -12,12 +12,13 @@
  GNU General Public License for more details.
 """
 
+
 from enum import IntEnum
 import time
-from typing import Callable, Optional, Tuple, Sequence
+from typing import Callable, Optional, Tuple, Sequence, NoReturn
 
 
-from cpython.mem cimport PyMem_Malloc
+from cpython.mem cimport PyMem_Malloc, PyMem_Free
 cimport cydoomgeneric as cdg
 import numpy as np
 cimport numpy as np
@@ -134,7 +135,9 @@ def main(argv: Optional[Sequence[str]]=None) -> int:
         bs = bytes(a, "utf-8")
         bytestrings.append(bs)
         cargv[i] = bs
-    cdg.dg_main(len(argv), cargv)
+    rval = cdg.dg_main(len(argv), cargv)
+    PyMem_Free(cargv)
+    return rval
 
 
 class Keys(IntEnum):

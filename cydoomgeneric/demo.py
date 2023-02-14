@@ -34,6 +34,7 @@ keymap = {
     "space": cdg.Keys.USE,
     "shift": cdg.Keys.RSHIFT,
     "enter": cdg.Keys.ENTER,
+    "escape": cdg.Keys.ESCAPE,
 }
 
 
@@ -46,17 +47,13 @@ class PyPlotDoom:
         self.keyevent_queue.append((event.key, 0))
 
 
-    def on_close(self, event) -> None:
-        sys.exit(0)
-
-
     def init(self) -> None:
         self.keyevent_queue = []
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(1,1,1)
         self.fig.canvas.mpl_connect('key_press_event', self.on_press)
         self.fig.canvas.mpl_connect('key_release_event', self.on_release)
-        self.fig.canvas.mpl_connect('close_event', self.on_close)
+        self.fig.canvas.mpl_connect('close_event', sys.exit)
         self.fig.show()
 
 
@@ -70,8 +67,12 @@ class PyPlotDoom:
     def get_key(self) -> Optional[Tuple[int, int]]:
         if len(self.keyevent_queue) == 0:
             return None
-        k = self.keyevent_queue.pop(0)
-        return (k[1], keymap[k[0]])
+        (key, pressed) = self.keyevent_queue.pop(0)
+        if key in keymap:
+            return (pressed, keymap[key])
+        elif len(key) == 1:
+            return (pressed, ord(key.lower()))
+        return (0, 0)
 
 
     def set_window_title(self, t: str) -> None:

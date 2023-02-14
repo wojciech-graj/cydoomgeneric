@@ -39,7 +39,7 @@ cdg.init(resx,
 cdg.main()  # Optional parameter argv=[...]
 ```
 
-All possible input keys for `get_key` are either members of the `Keys` enum, or the ascii value of the uppercase character `ord(c.upper())`.
+ `get_key` should return `None` if all input has been processed, or a tuple `(pressed as 0 or 1, key)`. All possible keys are either members of the `Keys` enum, or the ascii value of the lowercase character `ord(c.lower())`.
 
 Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 

@@ -49,7 +49,7 @@ Currently the project only runs on Linux (and potentially osx).
 
 You will need a C compiler (default: gcc) and GNU Make.
 
-The following python packages are required: `numpy cython`. To run the demo, `matplotlib` is also required.
+The following python packages are required: `numpy cython`.
 
 Currently, all python code must be run from the `cydoomgeneric` directory.
 
@@ -60,18 +60,42 @@ $ cd ../cydoomgeneric
 $ python setup.py build_ext --inplace
 ```
 
-Then to run the demo:
+## Demo Screenshots
+
+#### Pyplot
+![pyplot](screenshots/pyplotdoom_1.png)
+
+#### Libreoffice Calc
+![calc](screenshots/calcdoom_0.png)
+
+## Running the Demo
+
+#### Pyplot
+
+Ensure that the `matplotlib` python package is installed.
 
 ```
 $ cd cydoomgeneric
-$ python demo.py
+$ python demopyplot.py
 ```
 
-## Pyplot Demo Screenshots
+#### LibreOffice Calc
 
-![0](screenshots/pyplotdoom_0.png)
+Ensure that the libreoffice SDK (`libreoffice-dev` on Debian) is installed, and that you're using the system python installation instead of a virtual environment.
 
-![1](screenshots/pyplotdoom_1.png)
+The `scale` variable can be adjusted in the range `[0,5]` to change the display size, idealy either 1 or 2. Lower scales will exponentially increase the setup time required prior to starting the game. Expect to wait a few minutes.
+
+Sometimes the window will be tiny, so maximize it if neccessary. Also, you may experience unexpected issues while attempting to run this demo, and there's not much I can do because the UNO API has virtually no documentation and the code here has been pieced together from 10 year old forum posts for the Java or C++ version of the API.
+
+Only run the following command once, unless the libreoffice process is killed:
+```
+$ libreoffice --nofirststartwizard --nologo --norestore --accept='socket,host=localhost,port=2002,tcpNoDelay=1;urp;StarOffice.ComponentContext' &
+```
+
+```
+$ cd cydoomgeneric
+$ python democalc.py
+```
 
 ## TODO
 

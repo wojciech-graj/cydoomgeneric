@@ -6,7 +6,7 @@ Python bindings for [doomgeneric](https://github.com/ozkl/doomgeneric) with ease
 
 To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available.
 
-NOTE: This project is in early development and a lot of improvements will be made over the coming weeks. The entire build system is super janky, so that'll be a top priority. See the TODO section for some potential problems.
+NOTE: The entire build system is super janky, so expect that to change in the future. See the TODO section for some potential problems.
 
 ## Porting
 
@@ -29,7 +29,7 @@ def set_window_title(t: str) -> None:
 def get_ticks_ms() -> int:
 
 cdg.init(resx,
-    resy,
+    resy,n
     draw_frame,
     get_key,
     init=init,
@@ -68,7 +68,12 @@ $ python setup.py build_ext --inplace
 #### Libreoffice Calc
 ![calc](screenshots/calcdoom_0.png)
 
+#### Minecraft: Pi Edition
+![mcpi](screenshots/minepidoom_0.png)
+
 ## Running the Demo
+
+###### Before running any demo, perform the build process mentioned above
 
 #### Pyplot
 
@@ -77,6 +82,25 @@ Ensure that the `matplotlib` python package is installed.
 ```
 $ cd cydoomgeneric
 $ python demopyplot.py
+```
+
+#### Minecraft: Pi Edition
+
+Ensure that the `mcpi numpy scikit-image` packages are installed.
+
+Before running the script, launch Minecraft: Pi Edition and join a world. The `scale` variable can be adjusted to change the display size. Currently the only way to quit the game is to kill the process (`C-z`).
+
+To move, step on the appropriate block on the platform that the player is standing on. To press the fire, use, enter, or escape keys, hit (`RMB`) the appropriate block with the sword:
+```
+DIAMOND_BLOCK: FIRE
+GOLD_BLOCK: USE
+NETHER_REACTOR_CORE: ENTER
+NETHER_REACTOR_CORE(active): ESCAPE
+```
+
+```
+$ cd cydoomgeneric
+$ python demominepi.py
 ```
 
 #### LibreOffice Calc

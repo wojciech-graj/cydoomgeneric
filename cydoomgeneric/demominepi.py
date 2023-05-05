@@ -71,7 +71,7 @@ palette_blocks = (
     block.NETHERRACK,
     block.Block(block.NETHER_REACTOR_CORE.id, 2),
     block.NETHER_BRICK,
-    block.Block(155, 0),  # QUARTZ_BLOCK
+    block.Block(155),  # QUARTZ_BLOCK
     block.Block(155, 1),  # CHISELED_QUARTZ_BLOCK
     block.ICE,
 )
@@ -180,7 +180,7 @@ class MinecraftPiDoom:
 
     def draw_frame(self, pix: np.ndarray) -> None:
         for y, x in itertools.product(range(0, 200, self.scale), range(0, 320, self.scale)):
-            idx = np.argmin(color.deltaE_cie76(palette_lab, color.rgb2lab(pix[199 - y, x, [2, 1, 0]] / 256)))
+            idx = np.argmin(color.deltaE_cie76(palette_lab, color.rgb2lab(pix[199 - y, x, [2, 1, 0]] / 255)))
             self.mc.setBlock(x // self.scale, y // self.scale, 0, palette_blocks[idx])
         self.mc.getBlockWithData(0, 0, 0)  # Wait for entire frame to be drawn
         self.read_frame_input = False

@@ -114,7 +114,7 @@ setup(
             Extension(
                 "cydoomgeneric",
                 sources=[
-                    "cydoomgeneric.pyx"
+                    "./cydoomgeneric.pyx"
                 ]
                 + [f"./../doomgeneric/{src}" for src in doom_src],
                 include_dirs=[

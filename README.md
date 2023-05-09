@@ -6,8 +6,6 @@ Python bindings for [doomgeneric](https://github.com/ozkl/doomgeneric) with ease
 
 To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available.
 
-NOTE: The entire build system is super janky, so expect that to change in the future. See the TODO section for some potential problems.
-
 ## Porting
 
 You must implement the `draw_frame` and `get_key` functions.
@@ -47,17 +45,13 @@ Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 
 Currently the project only runs on Linux (and potentially osx).
 
-You will need a C compiler (default: gcc) and GNU Make.
-
 The following python packages are required: `numpy cython`.
 
-Currently, all python code must be run from the `cydoomgeneric` directory.
+To build and install cydoomgeneric, run the following commands:
 
 ```
-$ cd doomgeneric
-$ make
-$ cd ../cydoomgeneric
-$ python setup.py build_ext --inplace
+$ cd cydoomgeneric
+$ python setup.py install
 ```
 
 ## Demo Screenshots
@@ -86,7 +80,7 @@ $ python demopyplot.py
 
 #### Minecraft: Pi Edition
 
-Ensure that the `mcpi numpy scikit-image` packages are installed.
+Ensure that the `mcpi scikit-image` packages are installed.
 
 Before running the script, launch Minecraft: Pi Edition and join a world. The `scale` variable can be adjusted to change the display size. Currently the only way to quit the game is to kill the process (`C-z`).
 

@@ -18,6 +18,90 @@ from Cython.Build import cythonize
 import numpy
 
 
+doom_src = (
+    "am_map.c",
+    "d_event.c",
+    "d_items.c",
+    "d_iwad.c",
+    "d_loop.c",
+    "d_main.c",
+    "d_mode.c",
+    "d_net.c",
+    "doomdef.c",
+    "doomgeneric.c",
+    "doomstat.c",
+    "dstrings.c",
+    "dummy.c",
+    "f_finale.c",
+    "f_wipe.c",
+    "g_game.c",
+    "hu_lib.c",
+    "hu_stuff.c",
+    "i_cdmus.c",
+    "i_endoom.c",
+    "i_input.c",
+    "i_joystick.c",
+    "i_scale.c",
+    "i_sound.c",
+    "i_system.c",
+    "i_timer.c",
+    "i_video.c",
+    "info.c",
+    "m_argv.c",
+    "m_bbox.c",
+    "m_cheat.c",
+    "m_config.c",
+    "m_controls.c",
+    "m_fixed.c",
+    "m_menu.c",
+    "m_misc.c",
+    "m_random.c",
+    "memio.c",
+    "p_ceilng.c",
+    "p_doors.c",
+    "p_enemy.c",
+    "p_floor.c",
+    "p_inter.c",
+    "p_lights.c",
+    "p_map.c",
+    "p_maputl.c",
+    "p_mobj.c",
+    "p_plats.c",
+    "p_pspr.c",
+    "p_saveg.c",
+    "p_setup.c",
+    "p_sight.c",
+    "p_spec.c",
+    "p_switch.c",
+    "p_telept.c",
+    "p_tick.c",
+    "p_user.c",
+    "r_bsp.c",
+    "r_data.c",
+    "r_draw.c",
+    "r_main.c",
+    "r_plane.c",
+    "r_segs.c",
+    "r_sky.c",
+    "r_things.c",
+    "s_sound.c",
+    "sha1.c",
+    "sounds.c",
+    "st_lib.c",
+    "st_stuff.c",
+    "statdump.c",
+    "tables.c",
+    "v_video.c",
+    "w_checksum.c",
+    "w_file.c",
+    "w_file_stdc.c",
+    "w_main.c",
+    "w_wad.c",
+    "wi_stuff.c",
+    "z_zone.c",
+)
+
+
 setup(
     name="cydoomgeneric",
     description="Easily portable doom for python",
@@ -29,14 +113,26 @@ setup(
         [
             Extension(
                 "cydoomgeneric",
-                sources=["cydoomgeneric.pyx"],
-                include_dirs=["./../doomgeneric", numpy.get_include()],
+                sources=[
+                    "cydoomgeneric.pyx"
+                ]
+                + [f"./../doomgeneric/{src}" for src in doom_src],
+                include_dirs=[
+                    "./../doomgeneric",
+                    numpy.get_include()
+                ],
                 define_macros=[
                     ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION"),
+                    ("NORMALUNIX", None),
+                    ("LINUX", None),
+                    ("_DEFAULT_SOURCE", None),
                 ],
-                libraries=["doomgeneric"],
-                extra_objects=["./../doomgeneric/libdoomgeneric.so"],
-                extra_link_args=["-L./../doomgeneric"]
+                extra_compile_args=[
+                    "-Os",
+                ],
+                extra_link_args=[
+                    "-Wl,--gc-sections"
+                ],
             )
         ],
         language_level=2

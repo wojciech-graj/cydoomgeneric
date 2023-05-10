@@ -6,6 +6,8 @@ Python bindings for [doomgeneric](https://github.com/ozkl/doomgeneric) with ease
 
 To try it you will need a WAD file (game data). If you don't own the game, shareware version is freely available.
 
+cyDoomGeneric should run on Linux, MacOS, and Windows.
+
 ## Porting
 
 You must implement the `draw_frame` and `get_key` functions.
@@ -42,8 +44,6 @@ cdg.main()  # Optional parameter argv=[...]
 Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 
 ## Building
-
-Currently the project only runs on Linux (and potentially osx).
 
 The following python packages are required: `numpy cython`.
 

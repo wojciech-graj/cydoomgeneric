@@ -13,9 +13,11 @@
 """
 
 
-from setuptools import Extension, setup, find_packages
+from setuptools import Extension, setup
 from Cython.Build import cythonize
+import Cython
 import numpy
+import sys
 
 
 doom_src = (
@@ -102,6 +104,30 @@ doom_src = (
 )
 
 
+libraries = []
+define_macros = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
+extra_compile_args = []
+extra_link_args = []
+compiler_directives = {}
+
+
+if sys.platform == "win32":
+    libraries.append("user32")
+else:
+    define_macros.extend([
+        ("NORMALUNIX", None),
+        ("LINUX", None),
+        ("_DEFAULT_SOURCE", None)
+    ])
+    extra_compile_args.append("-Os")
+    extra_link_args.append("-Wl,--gc-sections")
+
+
+cython_version = list(map(lambda x: int(x) if x.isdigit() else x, Cython.__version__.split(".")))
+if cython_version[0] >= 3:
+    compiler_directives["legacy_implicit_noexcept"] = True
+
+
 setup(
     name="cydoomgeneric",
     description="Easily portable doom for python",
@@ -121,21 +147,14 @@ setup(
                     "./../doomgeneric",
                     numpy.get_include()
                 ],
-                define_macros=[
-                    ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION"),
-                    ("NORMALUNIX", None),
-                    ("LINUX", None),
-                    ("_DEFAULT_SOURCE", None),
-                ],
-                extra_compile_args=[
-                    "-Os",
-                ],
-                extra_link_args=[
-                    "-Wl,--gc-sections"
-                ],
+                define_macros=define_macros,
+                extra_compile_args=extra_compile_args,
+                extra_link_args=extra_link_args,
+                libraries=libraries
             )
         ],
-        language_level=2
+        language_level=2,
+        compiler_directives=compiler_directives
     ),
-    install_requires=['numpy>=1.20'],
+    install_requires=['numpy>=1.20']
 )

@@ -117,6 +117,5 @@ $ python democalc.py
 
 ## TODO
 
-- Windows build
 - Fix segfault when closing game
 - Implement sound

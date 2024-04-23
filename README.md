@@ -65,6 +65,9 @@ $ python setup.py install
 #### Minecraft: Pi Edition
 ![mcpi](screenshots/minepidoom_0.png)
 
+#### MS Paint
+![paint](screenshots/mspaintdoom_0.png)
+
 ## Running the Demo
 
 ###### Before running any demo, perform the build process mentioned above
@@ -97,6 +100,19 @@ $ cd cydoomgeneric
 $ python demominepi.py
 ```
 
+#### MS Paint
+
+Ensure that the `pyautogui pywinctl scikit-image` packages are installed, and that the Windows XP version of mspaint is installed, which can be done by running `winetricks mspaint`.
+
+If you have not installed mspaint using wine, you'll have to edit the `PAINT_COMMAND` variable in `demomspaint.py` to contain the command for launching paint.
+
+If you wish to free your mouse in the middle of a frame being drawn, you should drag it to the top-left corner of the screen, which will free it, at which point you can kill the python script. Once a frame has been drawn, you will be able to send an input by flood-filling the appropriate "key" drawn under the frame.
+
+```
+$ cd cydoomgeneric
+$ python demomspaint.py
+```
+
 #### LibreOffice Calc
 
 Ensure that the libreoffice SDK (`libreoffice-dev` on Debian) is installed, and that you're using the system python installation instead of a virtual environment.
@@ -118,4 +134,3 @@ $ python democalc.py
 ## TODO
 
 - Fix segfault when closing game
-- Implement sound

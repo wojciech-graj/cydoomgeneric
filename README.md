@@ -87,7 +87,7 @@ $ python demopyplot.py
 
 Ensure that the `mcpi scikit-image` packages are installed.
 
-Before running the script, launch Minecraft: Pi Edition and join a world. The `scale` variable can be adjusted to change the display size. Currently the only way to quit the game is to kill the process (`C-z`).
+Before running the script, launch Minecraft: Pi Edition and join a world. The `SCALE` variable in `demominepi.py` can be adjusted to change the display size.
 
 To move, step on the appropriate block on the platform that the player is standing on. To press the fire, use, enter, or escape keys, hit (`RMB`) the appropriate block with the sword:
 ```
@@ -119,7 +119,7 @@ $ python demomspaint.py
 
 Ensure that the libreoffice SDK (`libreoffice-dev` on Debian) is installed, and that you're using the system python installation instead of a virtual environment.
 
-The `scale` variable can be adjusted in the range `[0,5]` to change the display size, idealy either 1 or 2. Lower scales will exponentially increase the setup time required prior to starting the game. Expect to wait a few minutes.
+The `SCALE` variable in `democalc.py` can be adjusted in the range `[0,5]` to change the display size, idealy either 1 or 2. Lower scales will exponentially increase the setup time required prior to starting the game. Expect to wait a few minutes.
 
 Sometimes the window will be tiny, so maximize it if neccessary. Also, you may experience unexpected issues while attempting to run this demo, and there's not much I can do because the UNO API has virtually no documentation and the code here has been pieced together from 10 year old forum posts for the Java or C++ version of the API.
 

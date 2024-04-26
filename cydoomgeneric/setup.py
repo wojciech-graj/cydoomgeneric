@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -120,12 +120,6 @@ else:
         ("_DEFAULT_SOURCE", None)
     ])
     extra_compile_args.append("-Os")
-    extra_link_args.append("-Wl,--gc-sections")
-
-
-cython_version = list(map(lambda x: int(x) if x.isdigit() else x, Cython.__version__.split(".")))
-if cython_version[0] >= 3:
-    compiler_directives["legacy_implicit_noexcept"] = True
 
 
 setup(
@@ -153,7 +147,7 @@ setup(
                 libraries=libraries
             )
         ],
-        language_level=2,
+        language_level=3,
         compiler_directives=compiler_directives
     ),
     install_requires=['numpy>=1.20']

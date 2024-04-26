@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -13,17 +13,16 @@
 """
 
 import itertools
-from typing import Optional, Tuple, Set
+from typing import Optional, Tuple, Set, List
 
-
-import cydoomgeneric as cdg
 from mcpi import minecraft, block, event
 from mcpi.vec3 import Vec3
 import numpy as np
 from skimage import color
 
+import cydoomgeneric as cdg
 
-palette_blocks = (
+PALETTE_BLOCKS = (
     block.STONE,
     block.DIRT,
     block.COBBLESTONE,
@@ -77,7 +76,7 @@ palette_blocks = (
 )
 
 
-palette_lab = color.rgb2lab(np.array((
+PALETTE_LAB = color.rgb2lab(np.array((
     (.492, .492, .492),
     (.526, .378, .263),
     (.482, .482, .482),
@@ -131,7 +130,7 @@ palette_lab = color.rgb2lab(np.array((
 ), dtype=float))
 
 
-platform = (
+PLATFORM = (
     (-1, 0, -2, block.DIAMOND_BLOCK),
     (-1, 0, -1, block.NETHER_REACTOR_CORE),
     (-1, 0, 0, block.Block(block.WOOL.id, 2)),
@@ -147,7 +146,7 @@ platform = (
 )
 
 
-keypos = {
+KEYPOS = {
     (-1, 0, -2): cdg.Keys.FIRE,
     (1, 0, -2): cdg.Keys.USE,
     (-1, 0, -1): cdg.Keys.ENTER,
@@ -156,40 +155,41 @@ keypos = {
 
 
 class MinecraftPiDoom:
-    def init(self) -> None:
-        self.mc = minecraft.Minecraft.create()
-        self.scale = 5
-        self.pressed = set()
-        self.read_frame_input = False
+    def __init__(self) -> None:
+        self._mc = minecraft.Minecraft.create()
+        self._scale = 5
+        self._pressed: Set[int] = set()
+        self._read_frame_input = False
+        self._inputs: List[Tuple[int, int]] = []
 
-        self.ctrls_pos = Vec3(160 // self.scale, 100 // self.scale - 2, 68 - 6 * self.scale)
-        self.mc.setBlocks(0, 0, 0, 256, 128, 128, block.AIR)
-        self.mc.setBlocks(
-            self.ctrls_pos.x - 2, self.ctrls_pos.y + 1, self.ctrls_pos.z + 2,
-            self.ctrls_pos.x + 2, self.ctrls_pos.y + 2, self.ctrls_pos.z - 3,
+        self._ctrls_pos = Vec3(160 // self._scale, 100 // self._scale - 2, 68 - 6 * self._scale)
+        self._mc.setBlocks(0, 0, 0, 256, 128, 128, block.AIR)
+        self._mc.setBlocks(
+            self._ctrls_pos.x - 2, self._ctrls_pos.y + 1, self._ctrls_pos.z + 2,
+            self._ctrls_pos.x + 2, self._ctrls_pos.y + 2, self._ctrls_pos.z - 3,
             block.BEDROCK_INVISIBLE)
-        self.mc.setBlocks(
-            self.ctrls_pos.x - 1, self.ctrls_pos.y + 1, self.ctrls_pos.z + 1,
-            self.ctrls_pos.x + 1, self.ctrls_pos.y + 2, self.ctrls_pos.z - 2,
+        self._mc.setBlocks(
+            self._ctrls_pos.x - 1, self._ctrls_pos.y + 1, self._ctrls_pos.z + 1,
+            self._ctrls_pos.x + 1, self._ctrls_pos.y + 2, self._ctrls_pos.z - 2,
             block.AIR)
-        for blk in platform:
-            self.mc.setBlock(
-                self.ctrls_pos.x + blk[0], self.ctrls_pos.y + blk[1], self.ctrls_pos.z + blk[2],
+        for blk in PLATFORM:
+            self._mc.setBlock(
+                self._ctrls_pos.x + blk[0], self._ctrls_pos.y + blk[1], self._ctrls_pos.z + blk[2],
                 blk[3])
-        self.mc.player.setTilePos(self.ctrls_pos + Vec3(0, 1, 0))
+        self._mc.player.setTilePos(self._ctrls_pos + Vec3(0, 1, 0))
 
     def draw_frame(self, pix: np.ndarray) -> None:
-        for y, x in itertools.product(range(0, 200, self.scale), range(0, 320, self.scale)):
-            idx = np.argmin(color.deltaE_cie76(palette_lab, color.rgb2lab(pix[199 - y, x, [2, 1, 0]] / 255)))
-            self.mc.setBlock(x // self.scale, y // self.scale, 0, palette_blocks[idx])
-        self.mc.getBlockWithData(0, 0, 0)  # Wait for entire frame to be drawn
-        self.read_frame_input = False
+        for y, x in itertools.product(range(0, 200, self._scale), range(0, 320, self._scale)):
+            idx = np.argmin(color.deltaE_cie76(PALETTE_LAB, color.rgb2lab(pix[199 - y, x, [2, 1, 0]] / 255)))
+            self._mc.setBlock(x // self._scale, y // self._scale, 0, PALETTE_BLOCKS[idx])
+        self._mc.getBlockWithData(0, 0, 0)  # Wait for entire frame to be drawn
+        self._read_frame_input = False
 
     def get_key(self) -> Optional[Tuple[int, int]]:
-        if not self.read_frame_input:
-            self.read_frame_input = True
+        if not self._read_frame_input:
+            self._read_frame_input = True
 
-            dpos = self.mc.player.getTilePos() - self.ctrls_pos
+            dpos = self._mc.player.getTilePos() - self._ctrls_pos
             cur_pressed = set()
             if dpos.y == 1:
                 if dpos.x == -1:
@@ -201,17 +201,17 @@ class MinecraftPiDoom:
                 elif dpos.z == 1:
                     cur_pressed.add(cdg.Keys.DOWNARROW)
 
-            for e in self.mc.events.pollBlockHits():
+            for e in self._mc.events.pollBlockHits():
                 if e.type != event.BlockEvent.HIT:
                     continue
-                dpos = (*(e.pos - self.ctrls_pos),)
-                if dpos in keypos:
-                    cur_pressed.add(keypos[dpos])
+                dpos = (*(e.pos - self._ctrls_pos),)
+                if dpos in KEYPOS:
+                    cur_pressed.add(KEYPOS[dpos])
 
-            self.inputs = ([(0, key) for key in iter(self.pressed - cur_pressed)]
-                           + [(1, key) for key in iter(cur_pressed - self.pressed)])
-            self.pressed = cur_pressed
-        return self.inputs.pop() if len(self.inputs) else None
+            self._inputs = ([(0, key) for key in iter(self._pressed - cur_pressed)]
+                           + [(1, key) for key in iter(cur_pressed - self._pressed)])
+            self._pressed = cur_pressed
+        return self._inputs.pop() if self._inputs else None
 
 
 if __name__ == "__main__":
@@ -219,6 +219,5 @@ if __name__ == "__main__":
     cdg.init(320,
              200,
              g.draw_frame,
-             g.get_key,
-             init=g.init)
+             g.get_key)
     cdg.main()

@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -14,16 +14,15 @@
 
 
 import sys
-import time
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
-
-import cydoomgeneric as cdg
 import matplotlib.pyplot as plt
 import numpy as np
 
+import cydoomgeneric as cdg
 
-keymap = {
+
+KEYMAP = {
     "left": cdg.Keys.LEFTARROW,
     "right": cdg.Keys.RIGHTARROW,
     "up": cdg.Keys.UPARROW,
@@ -39,44 +38,39 @@ keymap = {
 
 
 class PyPlotDoom:
-    def on_press(self, event) -> None:
-        self.keyevent_queue.append((event.key, 1))
+    def __init__(self) -> None:
+        self._keyevent_queue: List[Tuple[str, int]] = []
+        self._fig = plt.figure()
+        self._ax = self._fig.add_subplot(1,1,1)
+        self._fig.canvas.mpl_connect('key_press_event', self._on_press)
+        self._fig.canvas.mpl_connect('key_release_event', self._on_release)
+        self._fig.canvas.mpl_connect('close_event', lambda _: sys.exit())
+        self._fig.show()
 
+    def _on_press(self, event) -> None:
+        self._keyevent_queue.append((event.key, 1))
 
-    def on_release(self, event) -> None:
-        self.keyevent_queue.append((event.key, 0))
-
-
-    def init(self) -> None:
-        self.keyevent_queue = []
-        self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(1,1,1)
-        self.fig.canvas.mpl_connect('key_press_event', self.on_press)
-        self.fig.canvas.mpl_connect('key_release_event', self.on_release)
-        self.fig.canvas.mpl_connect('close_event', sys.exit)
-        self.fig.show()
-
+    def _on_release(self, event) -> None:
+        self._keyevent_queue.append((event.key, 0))
 
     def draw_frame(self, pixels: np.ndarray) -> None:
-        self.ax.clear()
-        self.ax.imshow(pixels[:,:,[2,1,0]])
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-
+        self._ax.clear()
+        self._ax.imshow(pixels[:,:,[2,1,0]])
+        self._fig.canvas.draw()
+        self._fig.canvas.flush_events()
 
     def get_key(self) -> Optional[Tuple[int, int]]:
-        if len(self.keyevent_queue) == 0:
+        if len(self._keyevent_queue) == 0:
             return None
-        (key, pressed) = self.keyevent_queue.pop(0)
-        if key in keymap:
-            return (pressed, keymap[key])
-        elif len(key) == 1:
+        (key, pressed) = self._keyevent_queue.pop(0)
+        if key in KEYMAP:
+            return (pressed, KEYMAP[key])
+        if len(key) == 1:
             return (pressed, ord(key.lower()))
         return self.get_key()
 
-
     def set_window_title(self, t: str) -> None:
-        self.fig.suptitle(t)
+        self._fig.suptitle(t)
 
 
 if __name__ == "__main__":
@@ -85,9 +79,5 @@ if __name__ == "__main__":
         400,
         g.draw_frame,
         g.get_key,
-        init=g.init,
         set_window_title=g.set_window_title)
-    try:
-        cdg.main()
-    except KeyboardInterrupt:
-        sys.exit()
+    cdg.main()

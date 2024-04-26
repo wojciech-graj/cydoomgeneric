@@ -13,7 +13,6 @@
 """
 
 import subprocess
-import sys
 import time
 from typing import Optional, Tuple
 
@@ -214,7 +213,4 @@ if __name__ == "__main__":
         g.draw_frame,
         g.get_key,
         get_ticks_ms=g.get_ticks_ms)
-    try:
-        cdg.main()
-    except (KeyboardInterrupt, pyautogui.FailSafeException):
-        sys.exit()
+    cdg.main()

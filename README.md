@@ -29,7 +29,7 @@ def set_window_title(t: str) -> None:
 def get_ticks_ms() -> int:
 
 cdg.init(resx,
-    resy,n
+    resy,
     draw_frame,
     get_key,
     init=init,
@@ -39,7 +39,9 @@ cdg.init(resx,
 cdg.main()  # Optional parameter argv=[...]
 ```
 
- `get_key` should return `None` if all input has been processed, or a tuple `(pressed as 0 or 1, key)`. All possible keys are either members of the `Keys` enum, or the ascii value of the lowercase character `ord(c.lower())`.
+`get_key` should return `None` if all input has been processed, or a tuple `(pressed as 0 or 1, key)`. All possible keys are either members of the `Keys` enum, or the ascii value of the lowercase character `ord(c.lower())`.
+
+If any function that was passed to `cdg.init` raises an exception during the execution of `cdg.main`, `sys.exit(1)` is called.
 
 Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 
@@ -131,6 +133,18 @@ $ cd cydoomgeneric
 $ python democalc.py
 ```
 
-## TODO
+## License
 
-- Fix segfault when closing game
+```
+Copyright (c) 2023-2024 Wojciech Graj
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+```

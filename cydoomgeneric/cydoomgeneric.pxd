@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,13 +23,13 @@ cdef extern from "doomgeneric.h":
 
     void dg_Create(uint32_t resx,
          uint32_t resy,
-         void (*pDG_Init)(),
-         void (*pDG_DrawFrame)(),
-         void (*pDG_SleepMs)(uint32_t),
-         uint32_t (*pDG_GetTicksMs)(),
-         int (*pDG_GetKey)(int*, unsigned char*),
-         void (*pDG_SetWindowTitle)(const char*))
-    int dg_main(int argc, char **argv)
+         void (*pDG_Init)() except *,
+         void (*pDG_DrawFrame)() noexcept,
+         void (*pDG_SleepMs)(uint32_t) noexcept,
+         uint32_t (*pDG_GetTicksMs)() noexcept,
+         int (*pDG_GetKey)(int*, unsigned char*) noexcept,
+         void (*pDG_SetWindowTitle)(const char*) noexcept) except *
+    int dg_main(int argc, char **argv) noexcept
 
 
 cdef extern from "doomkeys.h":

@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -12,25 +12,24 @@
  GNU General Public License for more details.
 """
 
-
 import itertools
-import sys
+from typing import Optional, Tuple, List
 
-
-import cydoomgeneric as cdg
 import numpy as np
 import uno
 
+import cydoomgeneric as cdg
+
 
 # Change this variable to adjust screen resolution. Allowed values in range [0,5]
-scale = 1
+SCALE = 1
 
 
-keymap = {
+KEYMAP = {
     'a': cdg.Keys.LEFTARROW,
     'd': cdg.Keys.RIGHTARROW,
     'w': cdg.Keys.UPARROW,
-    'd': cdg.Keys.DOWNARROW,
+    's': cdg.Keys.DOWNARROW,
     ',': cdg.Keys.STRAFE_L,
     '.': cdg.Keys.STRAFE_R,
     'e': cdg.Keys.FIRE,
@@ -41,50 +40,50 @@ keymap = {
 }
 
 
-grad = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+GRAD = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
 
 class CalcDoom:
     def __init__(self, sheet, scale) -> None:
-        self.scale = scale
-        self.resx = 320 // (2 ** scale)
-        self.resy = 200 // (2 ** scale)
-        self.image_cell = sheet.getCellByPosition(1, 0)
-        self.input_cell = sheet.getCellByPosition(0, 0)
-        self.input = None
-        self.pressed = []
-        self.pressed_prev = []
+        self._scale = scale
+        self._resx = 320 // (2 ** scale)
+        self._resy = 200 // (2 ** scale)
+        self._image_cell = sheet.getCellByPosition(1, 0)
+        self._input_cell = sheet.getCellByPosition(0, 0)
+        self._input: Optional[List[str]] = None
+        self._pressed: List[int] = []
+        self._pressed_prev: List[int] = []
 
 
     def init(self) -> None:
-        for y in range(1, self.resy + 1):
-            print(f"Initializing row {y}/{self.resy}")
-            for x in range(1, self.resx + 1):
+        for y in range(1, self._resy + 1):
+            print(f"Initializing row {y}/{self._resy}")
+            for x in range(1, self._resx + 1):
                 cell = sheet.getCellByPosition(x, y)
-                cell.setFormula(f"=MID(B1;{x + (y - 1) * self.resx};1)")
+                cell.setFormula(f"=MID(B1;{x + (y - 1) * self._resx};1)")
 
 
-    def draw_frame(self, pix):
+    def draw_frame(self, pix) -> None:
         pix = np.average(pix, axis=-1)
-        self.image_cell.setString(''.join(
-            [grad[int(pix[y, x] * 0.35)] for y, x in
-                itertools.product(range(0, 200, 2 ** self.scale), range(0, 320, 2 ** self.scale))]))
+        self._image_cell.setString(''.join(
+            [GRAD[int(pix[y, x] * 0.35)] for y, x in
+                itertools.product(range(0, 200, 2 ** self._scale), range(0, 320, 2 ** self._scale))]))
 
 
-    def get_key(self):
-        if len(self.pressed) > 0:
-            return (0, self.pressed.pop())
-        if self.input == None:
-            self.input = list(self.input_cell.getString().lower())
-            self.input_cell.setString("")
-        if len(self.input) == 0:
-            self.input = None
-            self.pressed = self.pressed_prev
-            self.pressed_prev = []
+    def get_key(self) -> Optional[Tuple[int, int]]:
+        if len(self._pressed) > 0:
+            return (0, self._pressed.pop())
+        if self._input is None:
+            self._input = list(self._input_cell.getString().lower())
+            self._input_cell.setString("")
+        if len(self._input) == 0:
+            self._input = None
+            self._pressed = self._pressed_prev
+            self._pressed_prev = []
             return None
-        c = self.input.pop()
-        key = keymap[c] if c in keymap else ord(c)
-        self.pressed_prev.append(key)
+        c = self._input.pop()
+        key = KEYMAP[c] if c in KEYMAP else ord(c)
+        self._pressed_prev.append(key)
         return (1, key)
 
 
@@ -101,13 +100,10 @@ if __name__ == "__main__":
     document = desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, (PropertyValue(),))
     sheet = document.getSheets()[0]
 
-    g = CalcDoom(sheet, scale)
+    g = CalcDoom(sheet, SCALE)
     cdg.init(320,
         200,
         g.draw_frame,
         g.get_key,
         init=g.init)
-    try:
-        cdg.main()
-    except KeyboardInterrupt:
-        sys.exit()
+    cdg.main()

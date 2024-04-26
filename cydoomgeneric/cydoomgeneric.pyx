@@ -1,5 +1,5 @@
 """
- Copyright(C) 2023 Wojciech Graj
+ Copyright(C) 2023-2024 Wojciech Graj
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -15,7 +15,8 @@
 
 from enum import IntEnum
 import time
-from typing import Callable, Optional, Tuple, Sequence, NoReturn
+import sys
+from typing import Callable, Optional, Tuple, Sequence
 
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
@@ -33,40 +34,55 @@ __set_window_title_f: Optional[Callable[[str], None]]
 __start_time: int
 
 
-cdef void __init():
+cdef void __init() except *:
     if __init_f:
         __init_f()
 
 
-cdef void __draw_frame():
-    __draw_frame_f(np.asarray(<uint8_t[:cdg.DOOMGENERIC_RESY, :cdg.DOOMGENERIC_RESX, :4]><uint8_t*>&cdg.DG_ScreenBuffer[0]))
+cdef void __draw_frame() noexcept:
+    try:
+        __draw_frame_f(np.asarray(<uint8_t[:cdg.DOOMGENERIC_RESY, :cdg.DOOMGENERIC_RESX, :4]><uint8_t*>&cdg.DG_ScreenBuffer[0]))
+    except:
+        sys.exit(1)
 
 
-cdef void __sleep_ms(uint32_t ms):
+cdef void __sleep_ms(uint32_t ms) noexcept:
     if __sleep_ms_f:
-        __sleep_ms_f(ms)
+        try:
+            __sleep_ms_f(ms)
+        except:
+            sys.exit(1)
     else:
         time.sleep(ms / 1000)
 
 
-cdef uint32_t __get_ticks_ms():
+cdef uint32_t __get_ticks_ms() noexcept:
     if __get_ticks_ms_f:
-        return __get_ticks_ms_f()
+        try:
+            return __get_ticks_ms_f()
+        except:
+            sys.exit(1)
     else:
         return (time.time() - __start_time) * 1000
 
 
-cdef int __get_key(int *pressed, unsigned char *key):
-    r = __get_key_f()
+cdef int __get_key(int *pressed, unsigned char *key) noexcept:
+    try:
+        r = __get_key_f()
+    except:
+        sys.exit(1)
     if r is None:
         return 0
     (pressed[0], key[0]) = r
     return 1
 
 
-cdef void __set_window_title(const char *title):
+cdef void __set_window_title(const char *title) noexcept:
     if __set_window_title_f:
-        __set_window_title_f(title.decode("utf-8"))
+        try:
+            __set_window_title_f(title.decode("utf-8"))
+        except:
+            sys.exit(1)
 
 
 def init(resx: int,

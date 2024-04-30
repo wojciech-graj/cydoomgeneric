@@ -70,6 +70,9 @@ $ python setup.py install
 #### MS Paint
 ![paint](screenshots/mspaintdoom_0.png)
 
+#### Pygame
+![pygame](screenshots/pygamedoom_0.png)
+
 ## Running the Demo
 
 ###### Before running any demo, perform the build process mentioned above
@@ -131,6 +134,15 @@ $ libreoffice --nofirststartwizard --nologo --norestore --accept='socket,host=lo
 ```
 $ cd cydoomgeneric
 $ python democalc.py
+```
+
+#### Pygame
+
+Ensure that the `pygame` python package is installed.
+
+```
+$ cd cydoomgeneric
+$ python demopygame.py
 ```
 
 ## License

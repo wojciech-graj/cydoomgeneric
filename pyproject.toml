@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "cython", "numpy>=1.20"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cydoomgeneric"
+description = "Easily portable doom for python"
+version = "0.1.0"
+authors = [
+	{name = "Wojciech Graj"}
+]
+license = {file = "LICENSE"}
+
+[tool.setuptools]
+py-modules = []

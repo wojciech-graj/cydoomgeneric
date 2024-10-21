@@ -11,5 +11,8 @@ authors = [
 ]
 license = {file = "LICENSE"}
 
+[project.urls]
+homepage = "https://github.com/wojciech-graj/cydoomgeneric"
+
 [tool.setuptools]
 py-modules = []

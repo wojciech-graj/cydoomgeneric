@@ -123,7 +123,6 @@ else:
 
 
 setup(
-    url="https://github.com/wojciech-graj/cydoomgeneric",
     ext_modules=cythonize(
         [
             Extension(

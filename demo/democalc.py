@@ -13,12 +13,13 @@
 """
 
 import itertools
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 import uno
 
 import cydoomgeneric as cdg
+
 """
 Change this variable to adjust screen resolution. Allowed values in range [0,5]
 """
@@ -50,9 +51,9 @@ class CalcDoom:
         self._resy = 200 // (2**scale)
         self._image_cell = sheet.getCellByPosition(1, 0)
         self._input_cell = sheet.getCellByPosition(0, 0)
-        self._input: Optional[List[str]] = None
-        self._pressed: List[int] = []
-        self._pressed_prev: List[int] = []
+        self._input: Optional[list[str]] = None
+        self._pressed: list[int] = []
+        self._pressed_prev: list[int] = []
 
         for y in range(1, self._resy + 1):
             print(f"Initializing row {y}/{self._resy}")
@@ -67,7 +68,7 @@ class CalcDoom:
                 range(0, 200, 2**self._scale), range(0, 320, 2**self._scale))
         ]))
 
-    def get_key(self) -> Optional[Tuple[int, int]]:
+    def get_key(self) -> Optional[tuple[int, int]]:
         if len(self._pressed) > 0:
             return (0, self._pressed.pop())
         if self._input is None:

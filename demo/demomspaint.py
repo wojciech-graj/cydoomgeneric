@@ -83,7 +83,7 @@ class MsPaintDoom:
         self._window.alwaysOnTop(True)
         self._window.activate(True)
         self._ticks_ms = 0
-        self._last_input = None
+        self._last_input: Optional[cdg.Keys] = None
         self._read_frame_input = True
 
     def _select_pencil(self) -> None:
@@ -173,8 +173,9 @@ class MsPaintDoom:
                     pyautogui.PAUSE = 0.07
                     pyautogui.mouseUp()
 
-                region_inner_segments, region_inner_segment_cnt = measure.label(
-                    label_layer_inner == region_i, return_num=True)
+                region_inner_segments, region_inner_segment_cnt = (
+                    measure.label(label_layer_inner == region_i,
+                                  return_num=True))
 
                 for region_inner_segment_i in range(
                         1, region_inner_segment_cnt + 1):

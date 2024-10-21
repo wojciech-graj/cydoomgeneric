@@ -7,5 +7,6 @@
 *.so.map
 .ropeproject/
 .savegame/
+__pycache__/
 build/
 cydoomgeneric/cydoomgeneric.c

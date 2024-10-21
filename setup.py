@@ -112,17 +112,16 @@ else:
     define_macros.extend([("NORMALUNIX", None), ("LINUX", None),
                           ("_DEFAULT_SOURCE", None)])
 
-setup(
-    ext_modules=cythonize([
-        Extension("cydoomgeneric",
-                  sources=["./cydoomgeneric/cydoomgeneric.pyx"] +
-                  [f"./doomgeneric/{src}" for src in doom_src],
-                  include_dirs=["./doomgeneric",
-                                numpy.get_include()],
-                  define_macros=define_macros,
-                  extra_link_args=extra_link_args,
-                  libraries=libraries),
-    ],
-                          language_level=3),
-    package_data={"cydoomgeneric": ["py.typed", "cydoomgeneric.pyi"]},
-)
+setup(ext_modules=cythonize([
+    Extension("cydoomgeneric",
+              sources=["./cydoomgeneric/cydoomgeneric.pyx"] +
+              [f"./doomgeneric/{src}" for src in doom_src],
+              include_dirs=["./doomgeneric",
+                            numpy.get_include()],
+              define_macros=define_macros,
+              extra_link_args=extra_link_args,
+              libraries=libraries),
+],
+                            language_level=3),
+      package_data={"cydoomgeneric": ["py.typed", "__init__.pyi"]},
+      packages=["cydoomgeneric"])

@@ -24,6 +24,21 @@ dev = [
     "python-lsp-isort",
     "python-lsp-server[all]"
 ]
+pyplot = [
+    "matplotlib"
+]
+minepi = [
+    "mcpi",
+    "scikit-image"
+]
+mspaint = [
+    "pyautogui",
+    "pywinctl",
+    "scikit-image"
+]
+pygame = [
+    "pygame"
+]
 
 [tool.setuptools]
 py-modules = []

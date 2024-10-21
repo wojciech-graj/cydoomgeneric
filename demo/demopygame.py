@@ -14,7 +14,7 @@
 """
 
 import sys
-from typing import Optional, Tuple
+from typing import Optional
 
 import numpy as np
 import pygame
@@ -39,20 +39,18 @@ keymap = {
 class PygameDoom:
 
     def __init__(self) -> None:
-        self.resx = 640
-        self.resy = 400
-        self.screen = None
-
+        self._resx = 640
+        self._resy = 400
         pygame.init()
-        self.screen = pygame.display.set_mode((self.resx, self.resy))
+        self._screen = pygame.display.set_mode((self._resx, self._resy))
 
     def draw_frame(self, pixels: np.ndarray) -> None:
         pixels = np.rot90(pixels)
         pixels = np.flipud(pixels)
-        pygame.surfarray.blit_array(self.screen, pixels[:, :, [2, 1, 0]])
+        pygame.surfarray.blit_array(self._screen, pixels[:, :, [2, 1, 0]])
         pygame.display.flip()
 
-    def get_key(self) -> Optional[Tuple[int, int]]:
+    def get_key(self) -> Optional[tuple[int, int]]:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -73,8 +71,8 @@ class PygameDoom:
 
 if __name__ == "__main__":
     g = PygameDoom()
-    cdg.init(g.resx,
-             g.resy,
+    cdg.init(g._resx,
+             g._resy,
              g.draw_frame,
              g.get_key,
              set_window_title=g.set_window_title)

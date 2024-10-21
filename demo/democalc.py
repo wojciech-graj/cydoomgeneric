@@ -19,8 +19,9 @@ import numpy as np
 import uno
 
 import cydoomgeneric as cdg
-
-# Change this variable to adjust screen resolution. Allowed values in range [0,5]
+"""
+Change this variable to adjust screen resolution. Allowed values in range [0,5]
+"""
 SCALE = 1
 
 KEYMAP = {
@@ -37,7 +38,8 @@ KEYMAP = {
     '`': cdg.Keys.ESCAPE,
 }
 
-GRAD = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+GRAD = (
+    " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$")
 
 
 class CalcDoom:
@@ -88,8 +90,9 @@ if __name__ == "__main__":
     resolver = smgr_local.createInstanceWithContext(
         "com.sun.star.bridge.UnoUrlResolver", local_ctx)
     uno_ctx = resolver.resolve(
-        "uno:socket,host=localhost,port=2002,tcpNoDelay=1;urp;StarOffice.ComponentContext"
-    )
+        "uno:socket,host=localhost,port=2002,tcpNoDelay=1"
+        ";urp"
+        ";StarOffice.ComponentContext")
     uno_smgr = uno_ctx.ServiceManager
 
     desktop = uno_smgr.createInstanceWithContext("com.sun.star.frame.Desktop",

@@ -199,13 +199,13 @@ class MinecraftPiDoom:
             cur_pressed = set()
             if dpos.y == 1:
                 if dpos.x == -1:
-                    cur_pressed.add(cdg.Keys.LEFTARROW)
+                    cur_pressed.add(int(cdg.Keys.LEFTARROW))
                 elif dpos.x == 1:
-                    cur_pressed.add(cdg.Keys.RIGHTARROW)
+                    cur_pressed.add(int(cdg.Keys.RIGHTARROW))
                 if dpos.z == -1:
-                    cur_pressed.add(cdg.Keys.UPARROW)
+                    cur_pressed.add(int(cdg.Keys.UPARROW))
                 elif dpos.z == 1:
-                    cur_pressed.add(cdg.Keys.DOWNARROW)
+                    cur_pressed.add(int(cdg.Keys.DOWNARROW))
 
             for e in self._mc.events.pollBlockHits():
                 if e.type != event.BlockEvent.HIT:

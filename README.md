@@ -23,7 +23,6 @@ def draw_frame(pixels: np.ndarray) -> None:
 def get_key() -> Optional[tuple[int, int]]:
 
 # Optional functions
-def init() -> None:
 def sleep_ms(ms: int) -> None:
 def set_window_title(t: str) -> None:
 def get_ticks_ms() -> int:
@@ -32,7 +31,6 @@ cdg.init(resx,
     resy,
     draw_frame,
     get_key,
-    init=init,
     sleep_ms=sleep_ms,
     get_ticks_ms=get_ticks_ms,
     set_window_title=set_window_title)

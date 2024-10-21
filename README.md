@@ -47,13 +47,10 @@ Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 
 ## Building
 
-The following python packages are required: `numpy cython`.
-
-To build and install cydoomgeneric, run the following commands:
+To build and install cydoomgeneric, run the following command:
 
 ```
-$ cd cydoomgeneric
-$ python setup.py install
+$ pip install .
 ```
 
 ## Demo Screenshots

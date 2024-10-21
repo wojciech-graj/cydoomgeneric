@@ -1,5 +1,6 @@
 """
  Copyright(C) 2023-2024 Wojciech Graj
+ Copyright(C) 2024 Lena Bertho
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -123,22 +124,16 @@ else:
 
 
 setup(
-    name="cydoomgeneric",
-    description="Easily portable doom for python",
-    version="0.1.0",
-    author="Wojciech Graj",
-    url="https://github.com/wojciech-graj/cydoomgeneric",
-    license="GPL-2.0-or-later",
     ext_modules=cythonize(
         [
             Extension(
                 "cydoomgeneric",
                 sources=[
-                    "./cydoomgeneric.pyx"
+                    "./cydoomgeneric/cydoomgeneric.pyx"
                 ]
-                + [f"./../doomgeneric/{src}" for src in doom_src],
+                + [f"./doomgeneric/{src}" for src in doom_src],
                 include_dirs=[
-                    "./../doomgeneric",
+                    "./doomgeneric",
                     numpy.get_include()
                 ],
                 define_macros=define_macros,
@@ -150,5 +145,4 @@ setup(
         language_level=3,
         compiler_directives=compiler_directives
     ),
-    install_requires=['numpy>=1.20']
 )

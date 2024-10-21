@@ -108,6 +108,8 @@ extra_link_args: list[str] = []
 
 if sys.platform == "win32":
     libraries.append("user32")
+elif sys.platform == "darwin":
+    define_macros.extend([("NORMALUNIX", None), ("_DEFAULT_SOURCE", None)])
 else:
     define_macros.extend([("NORMALUNIX", None), ("LINUX", None),
                           ("_DEFAULT_SOURCE", None)])

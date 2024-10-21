@@ -130,8 +130,6 @@ python demo/democalc.py
 
 #### Pygame
 
-Ensure that the `pygame` python package is installed.
-
 ```sh
 pip install '.[pygame]'
 python demo/demopygame.py

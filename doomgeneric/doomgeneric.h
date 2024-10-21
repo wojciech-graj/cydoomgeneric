@@ -1,5 +1,5 @@
 //
-// Copyright(C) 2023 Wojciech Graj
+// Copyright(C) 2023-2024 Wojciech Graj
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ extern uint32_t* DG_ScreenBuffer;
 
 void dg_Create(uint32_t resx,
 	uint32_t resy,
-	void (*pDG_Init)(),
 	void (*pDG_DrawFrame)(),
 	void (*pDG_SleepMs)(uint32_t),
 	uint32_t (*pDG_GetTicksMs)(),
@@ -35,7 +34,6 @@ void dg_Create(uint32_t resx,
 	void (*pDG_SetWindowTitle)(const char*));
 int dg_main(int argc, char **argv);
 
-extern void (*DG_Init)();
 extern void (*DG_DrawFrame)();
 extern void (*DG_SleepMs)(uint32_t);
 extern uint32_t (*DG_GetTicksMs)();

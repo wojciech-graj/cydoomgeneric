@@ -1,9 +1,11 @@
+*.DS_Store
+*.WAD
+*.egg-info/
 *.o
 *.obj
-*.DS_Store
 *.so
-build/
-.savegame/
-*.WAD
 *.so.map
-./cydoomgeneric/cydoomgeneric.c
+.ropeproject/
+.savegame/
+build/
+cydoomgeneric/cydoomgeneric.c

@@ -1,7 +1,7 @@
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
-// Copyright(C) 2023 Wojciech Graj
+// Copyright(C) 2023-2024 Wojciech Graj
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@ uint32_t DOOMGENERIC_RESX;
 uint32_t DOOMGENERIC_RESY;
 uint32_t* DG_ScreenBuffer = 0;
 
-void (*DG_Init)();
 void (*DG_DrawFrame)();
 void (*DG_SleepMs)(uint32_t);
 uint32_t (*DG_GetTicksMs)();
@@ -39,7 +38,6 @@ void (*DG_SetWindowTitle)(const char*);
 
 void dg_Create(uint32_t resx,
 	uint32_t resy,
-	void (*pDG_Init)(),
 	void (*pDG_DrawFrame)(),
 	void (*pDG_SleepMs)(uint32_t),
 	uint32_t (*pDG_GetTicksMs)(),
@@ -49,7 +47,6 @@ void dg_Create(uint32_t resx,
 	DOOMGENERIC_RESX = resx;
 	DOOMGENERIC_RESY = resy;
 
-	DG_Init = pDG_Init;
 	DG_DrawFrame = pDG_DrawFrame;
 	DG_SleepMs = pDG_SleepMs;
 	DG_GetTicksMs = pDG_GetTicksMs;
@@ -57,8 +54,6 @@ void dg_Create(uint32_t resx,
 	DG_SetWindowTitle = pDG_SetWindowTitle;
 
 	DG_ScreenBuffer = malloc(DOOMGENERIC_RESX * DOOMGENERIC_RESY * 4);
-
-	DG_Init();
 }
 
 int dg_main(int argc, char **argv)

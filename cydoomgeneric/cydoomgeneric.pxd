@@ -23,7 +23,6 @@ cdef extern from "doomgeneric.h":
 
     void dg_Create(uint32_t resx,
          uint32_t resy,
-         void (*pDG_Init)() except *,
          void (*pDG_DrawFrame)() noexcept,
          void (*pDG_SleepMs)(uint32_t) noexcept,
          uint32_t (*pDG_GetTicksMs)() noexcept,

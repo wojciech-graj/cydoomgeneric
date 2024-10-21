@@ -14,50 +14,49 @@
 
 import subprocess
 import time
-from typing import Optional, Tuple
+from typing import Optional
 
+import numpy as np
 import pyautogui
 import pywinctl as pwc
-import numpy as np
-from skimage import color, measure, filters, segmentation, morphology
+from skimage import color, filters, measure, morphology, segmentation
 
 import cydoomgeneric as cdg
 
-
 PAINT_COMMAND = ["wine", "mspaint"]
 
-
-PALETTE_LAB = color.rgb2lab(np.array((
-    (0, 0, 0),
-    (128, 128, 128),
-    (128, 0, 0),
-    (128, 128, 0),
-    (0, 128, 0),
-    (0, 128, 128),
-    (0, 0, 128),
-    (128, 0, 128),
-    (128, 128, 64),
-    (0, 64, 64),
-    (0, 128, 256),
-    (0, 64, 128),
-    (64, 0, 255),
-    (128, 64, 0),
-    (255, 255, 255),
-    (192, 192, 192),
-    (255, 0, 0),
-    (255, 255, 0),
-    (0, 255, 0),
-    (0, 255, 255),
-    (0, 0, 255),
-    (255, 0, 255),
-    (255, 255, 128),
-    (0, 255, 128),
-    (128, 255, 255),
-    (128, 128, 255),
-    (255, 0, 128),
-    (255, 128, 64),
-), dtype=float) / 255.)
-
+PALETTE_LAB = color.rgb2lab(
+    np.array((
+        (0, 0, 0),
+        (128, 128, 128),
+        (128, 0, 0),
+        (128, 128, 0),
+        (0, 128, 0),
+        (0, 128, 128),
+        (0, 0, 128),
+        (128, 0, 128),
+        (128, 128, 64),
+        (0, 64, 64),
+        (0, 128, 256),
+        (0, 64, 128),
+        (64, 0, 255),
+        (128, 64, 0),
+        (255, 255, 255),
+        (192, 192, 192),
+        (255, 0, 0),
+        (255, 255, 0),
+        (0, 255, 0),
+        (0, 255, 255),
+        (0, 0, 255),
+        (255, 0, 255),
+        (255, 255, 128),
+        (0, 255, 128),
+        (128, 255, 255),
+        (128, 128, 255),
+        (255, 0, 128),
+        (255, 128, 64),
+    ),
+             dtype=float) / 255.)
 
 KEYMAP = (
     (cdg.Keys.LEFTARROW, '{'),
@@ -73,16 +72,18 @@ KEYMAP = (
 
 
 class MsPaintDoom:
+
     def __init__(self) -> None:
         self._paint_process = subprocess.Popen(PAINT_COMMAND, shell=False)
-        while (not (windows := pwc.getWindowsWithTitle("Paint", condition=pwc.Re.CONTAINS))):
+        while (not (windows := pwc.getWindowsWithTitle(
+                "Paint", condition=pwc.Re.CONTAINS))):
             pass
         time.sleep(1)
         self._window = windows[0]
         self._window.alwaysOnTop(True)
         self._window.activate(True)
         self._ticks_ms = 0
-        self._last_input = None
+        self._last_input: Optional[cdg.Keys] = None
         self._read_frame_input = True
 
     def _select_pencil(self) -> None:
@@ -116,10 +117,16 @@ class MsPaintDoom:
     def draw_frame(self, pixels: np.ndarray) -> None:
         pixels = pixels / 255.
         pixels = filters.gaussian(pixels, channel_axis=2, sigma=2)
-        pixels = np.apply_along_axis(lambda pix: np.argmin(color.deltaE_cie76(PALETTE_LAB, color.rgb2lab(pix[[2, 1, 0]]))), axis=2, arr=pixels)
+        pixels = np.apply_along_axis(lambda pix: np.argmin(
+            color.deltaE_cie76(PALETTE_LAB, color.rgb2lab(pix[[2, 1, 0]]))),
+                                     axis=2,
+                                     arr=pixels)
         pixels = pixels.astype(np.uint8)
         pixels = filters.rank.modal(pixels, morphology.disk(2))
-        pixels_with_border = np.pad(pixels, pad_width=1, mode='constant', constant_values=-1)
+        pixels_with_border = np.pad(pixels,
+                                    pad_width=1,
+                                    mode='constant',
+                                    constant_values=-1)
 
         color_idxs, color_cnts = np.unique(pixels, return_counts=True)
         color_idxs = color_idxs[np.argsort(color_cnts)[::-1]]
@@ -132,10 +139,15 @@ class MsPaintDoom:
         self._select_pencil()
         for i, idx in enumerate(color_idxs):
             layer = ~np.isin(pixels, color_idxs[:i])
-            layer = np.pad(layer, pad_width=1, mode='constant', constant_values=0)
-            label_layer, layer_region_cnt = measure.label(layer, return_num=True)
+            layer = np.pad(layer,
+                           pad_width=1,
+                           mode='constant',
+                           constant_values=0)
+            label_layer, layer_region_cnt = measure.label(layer,
+                                                          return_num=True)
 
-            label_layer_boundaries = segmentation.find_boundaries(label_layer, mode="inner")
+            label_layer_boundaries = segmentation.find_boundaries(label_layer,
+                                                                  mode="inner")
             label_layer_inner = label_layer.copy()
             label_layer_inner[label_layer_boundaries] = 0
 
@@ -143,12 +155,17 @@ class MsPaintDoom:
             self._select_color(idx)
 
             for region_i in range(1, layer_region_cnt + 1):
-                if not np.any((label_layer == region_i) & (pixels_with_border == idx)):
+                if not np.any((label_layer == region_i)
+                              & (pixels_with_border == idx)):
                     continue
-                region_contours = measure.find_contours((label_layer == region_i), 0.5, positive_orientation='high')
+                region_contours = measure.find_contours(
+                    (label_layer == region_i),
+                    0.5,
+                    positive_orientation='high')
                 for contour in region_contours:
                     win_x, win_y = self._window.position
-                    pyautogui.moveTo(61 + contour[0][1] + win_x, 24 + contour[0][0] + win_y)
+                    pyautogui.moveTo(61 + contour[0][1] + win_x,
+                                     24 + contour[0][0] + win_y)
                     pyautogui.mouseDown()
                     pyautogui.PAUSE = 0.0006
                     for (y, x) in contour:
@@ -156,10 +173,14 @@ class MsPaintDoom:
                     pyautogui.PAUSE = 0.07
                     pyautogui.mouseUp()
 
-                region_inner_segments, region_inner_segment_cnt = measure.label(label_layer_inner == region_i, return_num=True)
+                region_inner_segments, region_inner_segment_cnt = (
+                    measure.label(label_layer_inner == region_i,
+                                  return_num=True))
 
-                for region_inner_segment_i in range(1, region_inner_segment_cnt + 1):
-                    indices = np.argwhere(region_inner_segments == region_inner_segment_i)
+                for region_inner_segment_i in range(
+                        1, region_inner_segment_cnt + 1):
+                    indices = np.argwhere(
+                        region_inner_segments == region_inner_segment_i)
                     random_index = np.random.randint(0, len(indices))
                     y, x = indices[random_index]
 
@@ -181,7 +202,7 @@ class MsPaintDoom:
         self._select_fill_with_color()
         self._read_frame_input = False
 
-    def get_key(self) -> Optional[Tuple[int, int]]:
+    def get_key(self) -> Optional[tuple[int, int]]:
         if self._read_frame_input:
             return None
         if self._last_input is not None:
@@ -192,10 +213,12 @@ class MsPaintDoom:
         while True:
             time.sleep(0.1)
             win_x, win_y = self._window.position
-            im = np.asarray(pyautogui.screenshot(region=(61 + win_x, 224 + win_y, 35 * 9, 40)))
+            im = np.asarray(
+                pyautogui.screenshot(region=(61 + win_x, 224 + win_y, 35 * 9,
+                                             40)))
             for i, key in enumerate(KEYMAP):
                 x = 35 * i
-                if np.all(im[0:40, x:x+35] == 0):
+                if np.all(im[0:40, x:x + 35] == 0):
                     if key[0] is None:
                         return None
                     self._last_input = key[0]
@@ -208,9 +231,5 @@ class MsPaintDoom:
 
 if __name__ == "__main__":
     g = MsPaintDoom()
-    cdg.init(320,
-        200,
-        g.draw_frame,
-        g.get_key,
-        get_ticks_ms=g.get_ticks_ms)
+    cdg.init(320, 200, g.draw_frame, g.get_key, get_ticks_ms=g.get_ticks_ms)
     cdg.main()

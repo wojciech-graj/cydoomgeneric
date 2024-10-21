@@ -12,7 +12,7 @@ cyDoomGeneric should run on Linux, MacOS, and Windows.
 
 You must implement the `draw_frame` and `get_key` functions.
 
-```
+```python
 import cydoomgeneric as cdg
 
 resx = 640
@@ -20,10 +20,9 @@ resy = 400
 
 # Required functions
 def draw_frame(pixels: np.ndarray) -> None:
-def get_key() -> Optional[Tuple[int, int]]:
+def get_key() -> Optional[tuple[int, int]]:
 
 # Optional functions
-def init() -> None:
 def sleep_ms(ms: int) -> None:
 def set_window_title(t: str) -> None:
 def get_ticks_ms() -> int:
@@ -32,7 +31,6 @@ cdg.init(resx,
     resy,
     draw_frame,
     get_key,
-    init=init,
     sleep_ms=sleep_ms,
     get_ticks_ms=get_ticks_ms,
     set_window_title=set_window_title)
@@ -49,8 +47,8 @@ Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
 
 To build and install cydoomgeneric, run the following command:
 
-```
-$ pip install .
+```sh
+pip install .
 ```
 
 ## Demo Screenshots
@@ -76,18 +74,14 @@ $ pip install .
 
 #### Pyplot
 
-Ensure that the `matplotlib` python package is installed.
-
-```
-$ cd cydoomgeneric
-$ python demopyplot.py
+```sh
+pip install '.[pyplot]'
+python demo/demopyplot.py
 ```
 
 #### Minecraft: Pi Edition
 
-Ensure that the `mcpi scikit-image` packages are installed.
-
-Before running the script, launch Minecraft: Pi Edition and join a world. The `SCALE` variable in `demominepi.py` can be adjusted to change the display size.
+Before running the script, launch Minecraft: Pi Edition and join a world. The `SCALE` variable in `demo/demominepi.py` can be adjusted to change the display size.
 
 To move, step on the appropriate block on the platform that the player is standing on. To press the fire, use, enter, or escape keys, hit (`RMB`) the appropriate block with the sword:
 ```
@@ -97,49 +91,46 @@ NETHER_REACTOR_CORE: ENTER
 NETHER_REACTOR_CORE(active): ESCAPE
 ```
 
-```
-$ cd cydoomgeneric
-$ python demominepi.py
+```sh
+pip install '.[minepi]'
+python demo/demominepi.py
 ```
 
 #### MS Paint
 
-Ensure that the `pyautogui pywinctl scikit-image` packages are installed, and that the Windows XP version of mspaint is installed, which can be done by running `winetricks mspaint`.
+Ensure that the Windows XP version of mspaint is installed, which can be done by running `winetricks mspaint`.
 
-If you have not installed mspaint using wine, you'll have to edit the `PAINT_COMMAND` variable in `demomspaint.py` to contain the command for launching paint.
+If you have not installed mspaint using wine, you'll have to edit the `PAINT_COMMAND` variable in `demo/demomspaint.py` to contain the command for launching paint.
 
 If you wish to free your mouse in the middle of a frame being drawn, you should drag it to the top-left corner of the screen, which will free it, at which point you can kill the python script. Once a frame has been drawn, you will be able to send an input by flood-filling the appropriate "key" drawn under the frame.
 
-```
-$ cd cydoomgeneric
-$ python demomspaint.py
+```sh
+pip install '.[mspaint]'
+python demo/demomspaint.py
 ```
 
 #### LibreOffice Calc
 
 Ensure that the libreoffice SDK (`libreoffice-dev` on Debian) is installed, and that you're using the system python installation instead of a virtual environment.
 
-The `SCALE` variable in `democalc.py` can be adjusted in the range `[0,5]` to change the display size, idealy either 1 or 2. Lower scales will exponentially increase the setup time required prior to starting the game. Expect to wait a few minutes.
+The `SCALE` variable in `demo/democalc.py` can be adjusted in the range `[0,5]` to change the display size, idealy either 1 or 2. Lower scales will exponentially increase the setup time required prior to starting the game. Expect to wait a few minutes.
 
 Sometimes the window will be tiny, so maximize it if neccessary. Also, you may experience unexpected issues while attempting to run this demo, and there's not much I can do because the UNO API has virtually no documentation and the code here has been pieced together from 10 year old forum posts for the Java or C++ version of the API.
 
 Only run the following command once, unless the libreoffice process is killed:
-```
-$ libreoffice --nofirststartwizard --nologo --norestore --accept='socket,host=localhost,port=2002,tcpNoDelay=1;urp;StarOffice.ComponentContext' &
+```sh
+libreoffice --nofirststartwizard --nologo --norestore --accept='socket,host=localhost,port=2002,tcpNoDelay=1;urp;StarOffice.ComponentContext' &
 ```
 
-```
-$ cd cydoomgeneric
-$ python democalc.py
+```sh
+python demo/democalc.py
 ```
 
 #### Pygame
 
-Ensure that the `pygame` python package is installed.
-
-```
-$ cd cydoomgeneric
-$ python demopygame.py
+```sh
+pip install '.[pygame]'
+python demo/demopygame.py
 ```
 
 ## License

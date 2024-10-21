@@ -12,15 +12,13 @@
  GNU General Public License for more details.
 """
 
-
 import sys
-from typing import Optional, Tuple, List
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 import cydoomgeneric as cdg
-
 
 KEYMAP = {
     "left": cdg.Keys.LEFTARROW,
@@ -38,10 +36,11 @@ KEYMAP = {
 
 
 class PyPlotDoom:
+
     def __init__(self) -> None:
-        self._keyevent_queue: List[Tuple[str, int]] = []
+        self._keyevent_queue: list[tuple[str, int]] = []
         self._fig = plt.figure()
-        self._ax = self._fig.add_subplot(1,1,1)
+        self._ax = self._fig.add_subplot(1, 1, 1)
         self._fig.canvas.mpl_connect('key_press_event', self._on_press)
         self._fig.canvas.mpl_connect('key_release_event', self._on_release)
         self._fig.canvas.mpl_connect('close_event', lambda _: sys.exit())
@@ -55,11 +54,11 @@ class PyPlotDoom:
 
     def draw_frame(self, pixels: np.ndarray) -> None:
         self._ax.clear()
-        self._ax.imshow(pixels[:,:,[2,1,0]])
+        self._ax.imshow(pixels[:, :, [2, 1, 0]])
         self._fig.canvas.draw()
         self._fig.canvas.flush_events()
 
-    def get_key(self) -> Optional[Tuple[int, int]]:
+    def get_key(self) -> Optional[tuple[int, int]]:
         if len(self._keyevent_queue) == 0:
             return None
         (key, pressed) = self._keyevent_queue.pop(0)
@@ -76,8 +75,8 @@ class PyPlotDoom:
 if __name__ == "__main__":
     g = PyPlotDoom()
     cdg.init(640,
-        400,
-        g.draw_frame,
-        g.get_key,
-        set_window_title=g.set_window_title)
+             400,
+             g.draw_frame,
+             g.get_key,
+             set_window_title=g.set_window_title)
     cdg.main()

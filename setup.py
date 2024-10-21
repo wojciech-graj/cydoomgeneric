@@ -13,13 +13,11 @@
  GNU General Public License for more details.
 """
 
-
-from setuptools import Extension, setup
-from Cython.Build import cythonize
-import Cython
-import numpy
 import sys
 
+import numpy
+from Cython.Build import cythonize
+from setuptools import Extension, setup
 
 doom_src = (
     "am_map.c",
@@ -104,45 +102,28 @@ doom_src = (
     "z_zone.c",
 )
 
-
-libraries = []
-define_macros = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
-extra_compile_args = []
-extra_link_args = []
-compiler_directives = {}
-
+libraries: list[str] = []
+define_macros: list[tuple[str, str | None]] = []
+extra_link_args: list[str] = []
 
 if sys.platform == "win32":
     libraries.append("user32")
+elif sys.platform == "darwin":
+    define_macros.extend([("NORMALUNIX", None), ("_DEFAULT_SOURCE", None)])
 else:
-    define_macros.extend([
-        ("NORMALUNIX", None),
-        ("LINUX", None),
-        ("_DEFAULT_SOURCE", None)
-    ])
-    extra_compile_args.append("-Os")
+    define_macros.extend([("NORMALUNIX", None), ("LINUX", None),
+                          ("_DEFAULT_SOURCE", None)])
 
-
-setup(
-    ext_modules=cythonize(
-        [
-            Extension(
-                "cydoomgeneric",
-                sources=[
-                    "./cydoomgeneric/cydoomgeneric.pyx"
-                ]
-                + [f"./doomgeneric/{src}" for src in doom_src],
-                include_dirs=[
-                    "./doomgeneric",
-                    numpy.get_include()
-                ],
-                define_macros=define_macros,
-                extra_compile_args=extra_compile_args,
-                extra_link_args=extra_link_args,
-                libraries=libraries
-            )
-        ],
-        language_level=3,
-        compiler_directives=compiler_directives
-    ),
-)
+setup(ext_modules=cythonize([
+    Extension("cydoomgeneric",
+              sources=["./cydoomgeneric/cydoomgeneric.pyx"] +
+              [f"./doomgeneric/{src}" for src in doom_src],
+              include_dirs=["./doomgeneric",
+                            numpy.get_include()],
+              define_macros=define_macros,
+              extra_link_args=extra_link_args,
+              libraries=libraries),
+],
+                            language_level=3),
+      package_data={"cydoomgeneric": ["py.typed", "__init__.pyi"]},
+      packages=["cydoomgeneric"])

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "cython", "numpy>=1.20"]
+requires = ["setuptools", "cython", "numpy>=1.25"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,12 +7,42 @@ name = "cydoomgeneric"
 description = "Easily portable doom for python"
 version = "0.1.0"
 authors = [
-	{name = "Wojciech Graj"}
+    {name = "Wojciech Graj"}
 ]
 license = {file = "LICENSE"}
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.25"
+]
 
 [project.urls]
 homepage = "https://github.com/wojciech-graj/cydoomgeneric"
 
+[project.optional-dependencies]
+dev = [
+    "pylsp-mypy",
+    "pylsp-rope",
+    "python-lsp-isort",
+    "python-lsp-server[all]"
+]
+pyplot = [
+    "matplotlib"
+]
+minepi = [
+    "mcpi",
+    "scikit-image"
+]
+mspaint = [
+    "pyautogui",
+    "pywinctl",
+    "scikit-image"
+]
+pygame = [
+    "pygame"
+]
+
 [tool.setuptools]
 py-modules = []
+
+[tool.pydocstyle]
+ignore = ["D101", "D102", "D103", "D107", "D205", "D208", "D212", "D400", "D415"]

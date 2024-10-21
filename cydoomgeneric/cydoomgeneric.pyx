@@ -16,7 +16,7 @@
 from enum import IntEnum
 import time
 import sys
-from typing import Callable, Optional, Tuple, Sequence
+from typing import Callable, Optional, Sequence
 
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
@@ -25,18 +25,12 @@ import numpy as np
 cimport numpy as np
 
 
-__init_f: Optional[Callable[None, None]]
 __draw_frame_f: Callable[[np.ndarray], None]
 __sleep_ms_f: Optional[Callable[[int], None]]
 __get_ticks_ms_f: Optional[Callable[None, int]]
-__get_key_f: Callable[None, Optional[Tuple[int, int]]]
+__get_key_f: Callable[None, Optional[tuple[int, int]]]
 __set_window_title_f: Optional[Callable[[str], None]]
 __start_time: int
-
-
-cdef void __init() except *:
-    if __init_f:
-        __init_f()
 
 
 cdef void __draw_frame() noexcept:
@@ -89,26 +83,10 @@ def init(resx: int,
     resy: int,
     draw_frame: Callable[[np.ndarray], None],
     get_key: Callable[[int], str],
-    init: Optional[Callable[None, None]]=None,
     sleep_ms: Optional[Callable[[int], None]]=None,
-    get_ticks_ms: Optional[Callable[None, int]]=None,
+    get_ticks_ms: Optional[Callable[[], int]]=None,
     set_window_title: Optional[Callable[[str], None]]=None
     ) -> None:
-    """
-    init(resx, resx, init, draw_frame, sleep_ms, get_ticks_ms, get_key, set_window_title) -> None
-
-    Initializes the doom context.
-
-    :param int resx:
-    :param int resy:
-    :param Callable[[np.ndarray], None] draw_frame: Called every frame. Takes framebuffer as np.ndarray in shape [resy, resx, 4]. Pixels are BGR.
-    :param Callable[[int], Optional[Tuple[int, int]]] get_key: Called multiple times every frame until input is exhausted. Return None when input is exhausted. Otherwise, return (is pressed ~0/1~, key).
-    :param Optional[Callable[None, None]] init: Initialization function called immediately after this function terminates
-    :param Optional[Callable[[int], None]] sleep_ms:
-    :param Optional[Callable[None, int]] get_ticks_ms:
-    :param Optional[Callable[[str], None]] set_window_title:
-    """
-    global __init_f
     global __draw_frame_f
     global __sleep_ms_f
     global __get_ticks_ms_f
@@ -116,7 +94,6 @@ def init(resx: int,
     global __set_window_title_f
     global __start_time
 
-    __init_f = init
     __draw_frame_f = draw_frame
     __sleep_ms_f = sleep_ms
     __get_ticks_ms_f = get_ticks_ms
@@ -126,7 +103,6 @@ def init(resx: int,
 
     cdg.dg_Create(resx,
         resy,
-        &__init,
         &__draw_frame,
         &__sleep_ms,
         &__get_ticks_ms,
@@ -135,13 +111,6 @@ def init(resx: int,
 
 
 def main(argv: Optional[Sequence[str]]=None) -> int:
-    """
-    main(argv) -> int
-
-    Run doom. Must be called after init.
-
-    :param Optional[Sequence[str]] argv:
-    """
     if argv is None:
         return cdg.dg_main(0, NULL)
 

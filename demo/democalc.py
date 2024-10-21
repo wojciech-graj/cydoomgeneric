@@ -13,17 +13,17 @@
 """
 
 import itertools
-from typing import Optional, Tuple, List
+from typing import Optional
 
 import numpy as np
 import uno
 
 import cydoomgeneric as cdg
 
-
-# Change this variable to adjust screen resolution. Allowed values in range [0,5]
+"""
+Change this variable to adjust screen resolution. Allowed values in range [0,5]
+"""
 SCALE = 1
-
 
 KEYMAP = {
     'a': cdg.Keys.LEFTARROW,
@@ -39,38 +39,36 @@ KEYMAP = {
     '`': cdg.Keys.ESCAPE,
 }
 
-
-GRAD = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+GRAD = (
+    " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$")
 
 
 class CalcDoom:
+
     def __init__(self, sheet, scale) -> None:
         self._scale = scale
-        self._resx = 320 // (2 ** scale)
-        self._resy = 200 // (2 ** scale)
+        self._resx = 320 // (2**scale)
+        self._resy = 200 // (2**scale)
         self._image_cell = sheet.getCellByPosition(1, 0)
         self._input_cell = sheet.getCellByPosition(0, 0)
-        self._input: Optional[List[str]] = None
-        self._pressed: List[int] = []
-        self._pressed_prev: List[int] = []
+        self._input: Optional[list[str]] = None
+        self._pressed: list[int] = []
+        self._pressed_prev: list[int] = []
 
-
-    def init(self) -> None:
         for y in range(1, self._resy + 1):
             print(f"Initializing row {y}/{self._resy}")
             for x in range(1, self._resx + 1):
                 cell = sheet.getCellByPosition(x, y)
                 cell.setFormula(f"=MID(B1;{x + (y - 1) * self._resx};1)")
 
-
     def draw_frame(self, pix) -> None:
         pix = np.average(pix, axis=-1)
-        self._image_cell.setString(''.join(
-            [GRAD[int(pix[y, x] * 0.35)] for y, x in
-                itertools.product(range(0, 200, 2 ** self._scale), range(0, 320, 2 ** self._scale))]))
+        self._image_cell.setString(''.join([
+            GRAD[int(pix[y, x] * 0.35)] for y, x in itertools.product(
+                range(0, 200, 2**self._scale), range(0, 320, 2**self._scale))
+        ]))
 
-
-    def get_key(self) -> Optional[Tuple[int, int]]:
+    def get_key(self) -> Optional[tuple[int, int]]:
         if len(self._pressed) > 0:
             return (0, self._pressed.pop())
         if self._input is None:
@@ -90,20 +88,21 @@ class CalcDoom:
 if __name__ == "__main__":
     local_ctx = uno.getComponentContext()
     smgr_local = local_ctx.ServiceManager
-    resolver = smgr_local.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", local_ctx)
+    resolver = smgr_local.createInstanceWithContext(
+        "com.sun.star.bridge.UnoUrlResolver", local_ctx)
     uno_ctx = resolver.resolve(
-        "uno:socket,host=localhost,port=2002,tcpNoDelay=1;urp;StarOffice.ComponentContext")
+        "uno:socket,host=localhost,port=2002,tcpNoDelay=1"
+        ";urp"
+        ";StarOffice.ComponentContext")
     uno_smgr = uno_ctx.ServiceManager
 
-    desktop = uno_smgr.createInstanceWithContext("com.sun.star.frame.Desktop", uno_ctx)
+    desktop = uno_smgr.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                 uno_ctx)
     PropertyValue = uno.getClass('com.sun.star.beans.PropertyValue')
-    document = desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, (PropertyValue(),))
+    document = desktop.loadComponentFromURL("private:factory/scalc", "_blank",
+                                            0, (PropertyValue(), ))
     sheet = document.getSheets()[0]
 
     g = CalcDoom(sheet, SCALE)
-    cdg.init(320,
-        200,
-        g.draw_frame,
-        g.get_key,
-        init=g.init)
+    cdg.init(320, 200, g.draw_frame, g.get_key)
     cdg.main()

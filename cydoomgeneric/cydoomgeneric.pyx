@@ -79,14 +79,27 @@ cdef void __set_window_title(const char *title) noexcept:
             sys.exit(1)
 
 
-def init(resx: int,
-    resy: int,
-    draw_frame: Callable[[np.ndarray], None],
-    get_key: Callable[[int], str],
+def init(int resx,
+    int resy,
+    draw_frame not None: Callable[[np.ndarray], None],
+    get_key not None: Callable[[int], str],
     sleep_ms: Optional[Callable[[int], None]]=None,
     get_ticks_ms: Optional[Callable[[], int]]=None,
     set_window_title: Optional[Callable[[str], None]]=None
     ) -> None:
+    """Initializes the doom context.
+
+    :param resx:
+    :param resy:
+    :param draw_frame: Called every frame. Takes framebuffer as np.ndarray in
+        shape [resy, resx, 4]. Pixels are BGR.
+    :param get_key: Called multiple times every frame until input is exhausted.
+        Return None when input is exhausted. Otherwise, return
+        (is pressed ~0/1~, key).
+    :param sleep_ms:
+    :param get_ticks_ms:
+    :param set_window_title:
+    """
     global __draw_frame_f
     global __sleep_ms_f
     global __get_ticks_ms_f
@@ -111,6 +124,12 @@ def init(resx: int,
 
 
 def main(argv: Optional[Sequence[str]]=None) -> int:
+    """Runs doom.
+
+    Must be called after `init`.
+
+    :param Optional[Sequence[str]] argv:
+    """
     if argv is None:
         return cdg.dg_main(0, NULL)
 

@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cydoomgeneric"
 description = "Easily portable doom for python"
+readme = "README.md"
 version = "0.1.0"
 authors = [
     {name = "Wojciech Graj"}
@@ -14,6 +15,18 @@ requires-python = ">=3.9"
 dependencies = [
     "numpy>=1.25"
 ]
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Cython",
+]
+keywords= ["doom"]
 
 [project.urls]
 homepage = "https://github.com/wojciech-graj/cydoomgeneric"

@@ -14,6 +14,7 @@
 """
 
 import sys
+from typing import Union
 
 import numpy
 from Cython.Build import cythonize
@@ -103,7 +104,7 @@ doom_src = (
 )
 
 libraries: list[str] = []
-define_macros: list[tuple[str, str | None]] = []
+define_macros: list[tuple[str, Union[str, None]]] = []
 extra_link_args: list[str] = []
 
 if sys.platform == "win32":
@@ -124,6 +125,7 @@ setup(ext_modules=cythonize([
               extra_link_args=extra_link_args,
               libraries=libraries),
 ],
+                            build_dir="build",
                             language_level=3),
       package_data={"cydoomgeneric": ["py.typed", "__init__.pyi"]},
       packages=["cydoomgeneric"])

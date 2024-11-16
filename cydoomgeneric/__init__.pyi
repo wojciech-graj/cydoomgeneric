@@ -13,41 +13,24 @@
 """
 
 from enum import IntEnum
-from typing import Callable, Optional, Sequence
+from typing import Any, Callable, Literal, Optional, Sequence
 
 import numpy as np
 
 def init(resx: int,
          resy: int,
-         draw_frame: Callable[[np.ndarray], None],
+         draw_frame: Callable[
+             [np.ndarray[tuple[Any, Any, Literal[4]],
+                         np.dtype[np.uint8]]], None],
          get_key: Callable[[], Optional[tuple[int, int]]],
          sleep_ms: Optional[Callable[[int], None]] = None,
          get_ticks_ms: Optional[Callable[[], int]] = None,
          set_window_title: Optional[Callable[[str], None]] = None) -> None:
-    """
-    Initializes the doom context.
-
-    :param resx:
-    :param resy:
-    :param draw_frame: Called every frame. Takes framebuffer as np.ndarray in
-        shape [resy, resx, 4]. Pixels are BGR.
-    :param get_key: Called multiple times every frame until input is exhausted.
-        Return None when input is exhausted. Otherwise, return
-        (is pressed ~0/1~, key).
-    :param sleep_ms:
-    :param get_ticks_ms:
-    :param set_window_title:
-    """
+    ...
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    """
-    main(argv) -> int
-
-    Run doom. Must be called after init.
-
-    :param Optional[Sequence[str]] argv:
-    """
+    ...
 
 
 class Keys(IntEnum):

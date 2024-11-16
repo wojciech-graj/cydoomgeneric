@@ -27,7 +27,7 @@ cdef extern from "doomgeneric.h":
          void (*pDG_SleepMs)(uint32_t) noexcept,
          uint32_t (*pDG_GetTicksMs)() noexcept,
          int (*pDG_GetKey)(int*, unsigned char*) noexcept,
-         void (*pDG_SetWindowTitle)(const char*) noexcept) except *
+         void (*pDG_SetWindowTitle)(const char*) noexcept) noexcept
     int dg_main(int argc, char **argv) noexcept
 
 

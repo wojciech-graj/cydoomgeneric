@@ -8,6 +8,18 @@ To try it you will need a WAD file (game data). If you don't own the game, share
 
 cyDoomGeneric should run on Linux, MacOS, and Windows.
 
+## Installation
+
+Either install the latest release from PyPI
+```sh
+pip install cydoomgeneric
+```
+
+Or run the following command to build from the repository
+```sh
+pip install .
+```
+
 ## Porting
 
 You must implement the `draw_frame` and `get_key` functions.
@@ -42,14 +54,6 @@ cdg.main()  # Optional parameter argv=[...]
 If any function that was passed to `cdg.init` raises an exception during the execution of `cdg.main`, `sys.exit(1)` is called.
 
 Some additional documentation can be found in `cydoomgeneric/cydoomgeneric.pyx`.
-
-## Building
-
-To build and install cydoomgeneric, run the following command:
-
-```sh
-pip install .
-```
 
 ## Demo Screenshots
 
